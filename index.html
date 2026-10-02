@@ -1,0 +1,983 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Redline PDF Editor</title>
+<meta name="description" content="Free online PDF editor. Edit existing text with automatic font matching, add text, draw, highlight, sign and rearrange pages. Files stay in your browser.">
+<meta name="theme-color" content="#c4382c">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect x=%226%22 y=%223%22 width=%2220%22 height=%2226%22 rx=%222%22 fill=%22white%22 stroke=%22%231b2127%22 stroke-width=%222%22/%3E%3Cpath d=%22M9 17l14-3%22 stroke=%22%23c4382c%22 stroke-width=%223%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400;0,700;1,400;1,700&family=Carlito:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Lato:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,400;0,700;1,400;1,700&family=Inter:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+3:ital,wght@0,400;0,700;1,400;1,700&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Raleway:ital,wght@0,400;0,700;1,400;1,700&family=Nunito:ital,wght@0,400;0,700;1,400;1,700&family=Work+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Oswald:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tinos:ital,wght@0,400;0,700;1,400;1,700&family=Caladea:ital,wght@0,400;0,700;1,400;1,700&family=Gelasio:ital,wght@0,400;0,700;1,400;1,700&family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=EB+Garamond:ital,wght@0,400;0,700;1,400;1,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Roboto+Slab:wght@400;700&family=Cousine:ital,wght@0,400;0,700;1,400;1,700&family=Roboto+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Source+Code+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Dancing+Script:wght@400;700&family=Pacifico&family=Great+Vibes&family=Noto+Nastaliq+Urdu:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap">
+<style>
+/* Layout: proofing desk — tool rail | page strip | scrolling paper stack, red proofmark accent */
+:root{
+  --bg:#e9ecef; --panel:#f7f8f9; --panel-2:#ffffff; --line:#d3d8dd; --ink:#1b2127; --ink-2:#5b6670;
+  --desk:#dde1e5; --accent:#c4382c; --accent-ink:#ffffff; --accent-soft:#f6dedb; --hover:#e6e9ec; --ok:#1d7a46; --shadow:0 1px 2px rgba(20,28,36,.12),0 6px 20px rgba(20,28,36,.10);
+  --f-ui:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#14171a; --panel:#1b1f23; --panel-2:#22272c; --line:#2f363d; --ink:#e4e7ea; --ink-2:#9aa4ad;
+  --desk:#101214; --accent:#ef6a5d; --accent-ink:#1a0d0b; --accent-soft:#3a201d; --hover:#272d33; --ok:#5cc98b; --shadow:0 1px 2px rgba(0,0,0,.5),0 8px 24px rgba(0,0,0,.45); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#14171a; --panel:#1b1f23; --panel-2:#22272c; --line:#2f363d; --ink:#e4e7ea; --ink-2:#9aa4ad;
+  --desk:#101214; --accent:#ef6a5d; --accent-ink:#1a0d0b; --accent-soft:#3a201d; --hover:#272d33; --ok:#5cc98b; --shadow:0 1px 2px rgba(0,0,0,.5),0 8px 24px rgba(0,0,0,.45); color-scheme:dark}
+html,body{height:100%;margin:0}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font:13px/1.4 var(--f-ui);overflow:hidden}
+button,select,input{font:inherit;color:inherit}
+.app{height:100%;display:grid;grid-template-columns:52px 172px minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr);}
+/* header */
+.top{grid-column:1/-1;display:flex;align-items:center;gap:12px;padding:8px 16px;background:var(--panel);border-bottom:1px solid var(--line);min-width:0}
+.brand{display:flex;align-items:center;gap:8px;font-weight:600;letter-spacing:.01em;white-space:nowrap}
+.brand .mark{width:22px;height:26px;border-radius:2px;background:var(--panel-2);border:1.5px solid var(--ink);position:relative}
+.brand .mark::after{content:"";position:absolute;left:3px;right:3px;top:11px;height:2px;background:var(--accent);transform:rotate(-8deg)}
+.fname{color:var(--ink-2);font-family:var(--f-mono);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1}
+.fname b{color:var(--ink);font-weight:500}
+.chip{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;padding:2px 6px;border-radius:3px;background:var(--accent-soft);color:var(--accent);margin-left:6px}
+.btn{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:6px;border:1px solid var(--line);background:var(--panel-2);cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--hover)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.btn.primary:hover{filter:brightness(1.06)}
+.btn svg{width:16px;height:16px}
+.ibtn{width:32px;height:32px;display:inline-grid;place-items:center;border-radius:6px;border:0;background:transparent;cursor:pointer;color:var(--ink)}
+.ibtn:hover{background:var(--hover)}
+.ibtn:disabled{opacity:.35;cursor:default;background:transparent}
+.ibtn svg{width:18px;height:18px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+/* property bar */
+.props{grid-column:1/-1;display:flex;align-items:center;gap:6px;padding:6px 16px;background:var(--panel);border-bottom:1px solid var(--line);overflow-x:auto;min-height:45px;scrollbar-width:thin}
+.props .grp{display:flex;align-items:center;gap:4px;padding-right:8px;margin-right:2px;border-right:1px solid var(--line);flex:none}
+.props .grp:last-child{border-right:0}
+.props label.cap{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-2);margin-right:2px}
+.sw{width:20px;height:20px;border-radius:50%;border:1px solid rgba(0,0,0,.18);cursor:pointer;padding:0;flex:none}
+.sw.on{box-shadow:0 0 0 2px var(--panel),0 0 0 4px var(--accent)}
+.sw.none{background:linear-gradient(135deg,transparent 45%,var(--accent) 45% 55%,transparent 55%),var(--panel-2)}
+input[type=color]{width:24px;height:24px;border:0;padding:0;background:none;cursor:pointer}
+.props select,.props input[type=number]{height:28px;border:1px solid var(--line);border-radius:5px;background:var(--panel-2);padding:0 6px}
+.props input[type=number]{width:56px;font-family:var(--f-mono)}
+.tog{height:28px;min-width:28px;border-radius:5px;border:1px solid var(--line);background:var(--panel-2);cursor:pointer;font-weight:600}
+.tog.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+.props input[type=range]{width:80px;accent-color:var(--accent)}
+.hint{color:var(--ink-2);font-size:12px;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.hint .det b{color:var(--ink);font-weight:500}
+.tag{font-size:11px;padding:2px 7px;border-radius:10px;background:var(--hover);color:var(--ink)}
+.tag.ok{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)}
+/* tool rail */
+.rail{grid-row:3;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0;overflow-y:auto}
+.rail .sep{width:24px;height:1px;background:var(--line);margin:4px 0}
+.tool{width:38px;height:38px;border:0;border-radius:7px;background:transparent;cursor:pointer;display:grid;place-items:center;color:var(--ink);position:relative;flex:none}
+.tool svg{width:20px;height:20px}
+.tool:hover{background:var(--hover)}
+.tool.on{background:var(--accent-soft);color:var(--accent)}
+.tool .tip{position:absolute;left:46px;top:50%;transform:translateY(-50%);background:var(--ink);color:var(--panel);padding:4px 8px;border-radius:4px;white-space:nowrap;font-size:12px;pointer-events:none;opacity:0;transition:opacity .12s;z-index:30}
+.tool .tip kbd{font-family:var(--f-mono);opacity:.7;margin-left:6px}
+.tool:hover .tip{opacity:1}
+/* thumbnails */
+.thumbs{grid-row:3;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+.thumbs .head{display:flex;align-items:center;justify-content:space-between;padding:8px 8px 6px 12px;font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-2)}
+.pageops{display:flex;flex-wrap:wrap;gap:0;padding:0 6px 6px;border-bottom:1px solid var(--line)}
+.pageops .ibtn{width:30px;height:30px}
+.tlist{overflow-y:auto;padding:12px 0 24px;display:flex;flex-direction:column;align-items:center;gap:14px;flex:1}
+.th{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:6px;border-radius:6px;border:2px solid transparent}
+.th.cur{border-color:var(--accent)}
+.th.drop-before{box-shadow:0 -3px 0 var(--accent)}
+.th.drop-after{box-shadow:0 3px 0 var(--accent)}
+.th canvas{display:block;background:#fff;box-shadow:var(--shadow);max-width:120px}
+.th span{font-family:var(--f-mono);font-size:11px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+/* viewer */
+.viewer{grid-row:3;background:var(--desk);overflow:auto;position:relative;min-width:0}
+.stack{display:flex;flex-direction:column;align-items:center;gap:20px;padding:24px 16px 80px;min-width:min-content}
+.pg{position:relative;flex:none}
+.pgi{position:absolute;left:50%;top:50%;background:#fff;box-shadow:var(--shadow)}
+.pgi canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.ov{position:absolute;inset:0;overflow:hidden}
+.viewer[data-tool="draw"] .ov,.viewer[data-tool="rect"] .ov,.viewer[data-tool="ellipse"] .ov,.viewer[data-tool="line"] .ov,.viewer[data-tool="arrow"] .ov,.viewer[data-tool="highlight"] .ov,.viewer[data-tool="whiteout"] .ov{cursor:crosshair;touch-action:none}
+.viewer[data-tool="text"] .ov{cursor:text}
+.viewer[data-tool="place"] .ov{cursor:copy;touch-action:none}
+.an{position:absolute;box-sizing:border-box}
+.an.txt{white-space:pre;line-height:1.2;padding:0;outline:none;min-width:4px;cursor:move}
+.an.txt[contenteditable]{cursor:text;outline:1px dashed var(--accent);outline-offset:2px;background:rgba(255,255,255,.35)}
+.an.txt[contenteditable]:empty::before{content:"Type here";color:#9aa3ab}
+.an.hl{mix-blend-mode:multiply}
+.an img{width:100%;height:100%;display:block;pointer-events:none;user-select:none}
+.viewer[data-tool="select"] .an{cursor:move}
+.an.sel{outline:1.5px solid #2f7de1;outline-offset:2px}
+.hdl{position:absolute;right:-7px;bottom:-7px;width:10px;height:10px;background:#fff;border:1.5px solid #2f7de1;border-radius:2px;cursor:nwse-resize;touch-action:none}
+.vec{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.vec .hit{pointer-events:stroke;stroke:transparent;fill:none;cursor:move}
+.ti{position:absolute;border:1px dashed rgba(47,125,225,.55);background:rgba(47,125,225,.06);cursor:text;border-radius:1px}
+.ti:hover{background:rgba(47,125,225,.18);border-style:solid}
+.drop{position:absolute;inset:0;background:color-mix(in srgb,var(--accent) 12%,transparent);border:3px dashed var(--accent);display:grid;place-items:center;font-size:18px;font-weight:600;color:var(--accent);pointer-events:none;z-index:20}
+.zoombar{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:2px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:3px;box-shadow:var(--shadow);z-index:15}
+.zoombar .val{font-family:var(--f-mono);font-size:12px;min-width:48px;text-align:center;font-variant-numeric:tabular-nums}
+.zoombar .pn{font-family:var(--f-mono);font-size:12px;padding:0 6px;color:var(--ink-2);font-variant-numeric:tabular-nums;border-right:1px solid var(--line);margin-right:2px;height:24px;display:flex;align-items:center}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--panel);padding:9px 14px;border-radius:7px;font-size:13px;z-index:60;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
+.loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--ink-2)}
+/* modal */
+.scrim{position:fixed;inset:0;background:rgba(10,14,18,.45);display:grid;place-items:center;z-index:50;padding:16px}
+.modal{background:var(--panel);border-radius:10px;box-shadow:var(--shadow);width:min(520px,100%);padding:18px;display:flex;flex-direction:column;gap:12px}
+.modal h2{margin:0;font-size:16px;font-weight:600}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line)}
+.tabs button{border:0;background:none;padding:6px 10px;cursor:pointer;border-bottom:2px solid transparent;color:var(--ink-2)}
+.tabs button.on{border-color:var(--accent);color:var(--ink);font-weight:500}
+.pad{width:100%;height:180px;background:#fff;border:1px solid var(--line);border-radius:6px;touch-action:none;cursor:crosshair;display:block}
+.sigtype{height:44px;border:1px solid var(--line);border-radius:6px;padding:0 10px;background:var(--panel-2);width:100%;box-sizing:border-box;font-size:15px}
+.sigprev{height:110px;background:#fff;border:1px solid var(--line);border-radius:6px;display:grid;place-items:center;font:600 54px/1 Caveat,cursive;color:#14306b;overflow:hidden;white-space:nowrap}
+.mrow{display:flex;gap:8px;justify-content:flex-end;align-items:center;flex-wrap:wrap}
+.mrow .grow{flex:1;display:flex;gap:6px;align-items:center}
+.saved-sig{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.saved-sig img{height:40px;background:#fff;border:1px solid var(--line);border-radius:4px;padding:2px 6px;cursor:pointer}
+.mobile-only{display:none}
+@media (max-width:760px){
+  .app{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto minmax(0,1fr)}
+  .rail{grid-row:3;flex-direction:row;overflow-x:auto;overflow-y:hidden;border-right:0;border-bottom:1px solid var(--line);padding:4px 12px;justify-content:flex-start}
+  .rail .sep{width:1px;height:24px;margin:0 4px}
+  .tool .tip{display:none}
+  .thumbs{position:fixed;left:0;top:0;bottom:0;width:190px;z-index:40;box-shadow:var(--shadow);padding-top:env(safe-area-inset-top,0px)}
+  .viewer{grid-row:4}
+  .mobile-only{display:inline-grid}
+  .btn .lbl{display:none}
+  .top{padding:8px 12px}
+  .props{padding:6px 12px}
+  .zoombar{right:12px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+  <header class="top">
+    <button class="ibtn mobile-only" id="tgThumbs" aria-label="Show pages"></button>
+    <div class="brand"><span class="mark" aria-hidden="true"></span><span>Redline</span></div>
+    <div class="fname" id="fname"></div>
+    <button class="ibtn" id="bUndo" aria-label="Undo (Ctrl+Z)" title="Undo (Ctrl+Z)"></button>
+    <button class="ibtn" id="bRedo" aria-label="Redo (Ctrl+Y)" title="Redo (Ctrl+Y)"></button>
+    <button class="btn" id="bOpen"><span id="iOpen"></span><span class="lbl">Open PDF</span></button>
+    <button class="btn primary" id="bSave"><span id="iSave"></span><span class="lbl">Download</span></button>
+    <input type="file" id="fOpen" accept="application/pdf,.pdf" hidden>
+    <input type="file" id="fMerge" accept="application/pdf,.pdf" hidden>
+    <input type="file" id="fImg" accept="image/*" hidden>
+  </header>
+  <div class="props" id="props"></div>
+  <nav class="rail" id="rail" aria-label="Tools"></nav>
+  <aside class="thumbs" id="thumbs">
+    <div class="head"><span>Pages</span><span id="pcount" style="font-family:var(--f-mono)"></span></div>
+    <div class="pageops" id="pageops"></div>
+    <div class="tlist" id="tlist"></div>
+  </aside>
+  <main class="viewer" id="viewer" data-tool="select"><div class="stack" id="stack"></div><div class="loading" id="loading">Loading editor…</div></main>
+</div>
+<div class="zoombar" id="zoombar">
+  <span class="pn" id="pnum">1 / 1</span>
+  <button class="ibtn" id="zOut" aria-label="Zoom out"></button>
+  <span class="val" id="zVal">100%</span>
+  <button class="ibtn" id="zIn" aria-label="Zoom in"></button>
+  <button class="ibtn" id="zFit" aria-label="Fit width" title="Fit width"></button>
+</div>
+
+<script src="lib/pdf.min.js"></script>
+<script src="lib/pdf.worker.min.js"></script>
+<script src="lib/pdf-lib.min.js"></script>
+<script src="lib/fontkit.umd.min.js"></script>
+<script>
+(() => {
+'use strict';
+const $ = s => document.querySelector(s);
+const P = 'stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"';
+const ic = d => `<svg viewBox="0 0 24 24" ${P} aria-hidden="true"><path d="${d}"/></svg>`;
+const I = {
+  select:'M5 3l14 7-6.2 2.1L10.6 18z', edittext:'M4 7V4h11v3M9.5 4v15M7 19h5M14 18l6-6 2 2-6 6h-2z',
+  text:'M5 7V4h14v3M12 4v16M9 20h6', draw:'M4 20l4.5-1L19 8.5 15.5 5 5 15.5zM13.5 7l3.5 3.5',
+  highlight:'M8.5 14.5L6 17v2h3l2.5-2.5M8.5 14.5l7-10 4 3-7 10zM4 22h16', rect:'M4 6h16v12H4z',
+  ellipse:'M12 5c4.4 0 8 3.1 8 7s-3.6 7-8 7-8-3.1-8-7 3.6-7 8-7z', line:'M5 19L19 5', arrow:'M5 19L19 5M10 5h9v9',
+  whiteout:'M3 17l8.5-9.5 7.5 6.5-5 5.5H8zM7.5 12.5l7 6M3 22h18', image:'M4 5h16v14H4zM4 16l5-5 4 4 2-2 5 5M15.5 9h.01',
+  sign:'M3 16c3-7 5.5-9.5 6.5-7.5s-2.5 8 0 8 3-5 5-5 .5 4 3 4 2-2 3.5-2M3 21h18',
+  undo:'M9 14L4 9l5-5M4 9h10.5a5.5 5.5 0 010 11H12', redo:'M15 14l5-5-5-5M20 9H9.5a5.5 5.5 0 000 11H12',
+  rotl:'M4 4v5h5M4.6 9A8 8 0 1112 20', rotr:'M20 4v5h-5M19.4 9A8 8 0 1012 20',
+  trash:'M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v5M14 11v5', copy:'M8 8h12v12H8zM4 16V4h12',
+  blank:'M6 3h8l4 4v14H6zM14 3v4h4M12 11v6M9 14h6', merge:'M6 3h8l4 4v14H6zM14 3v4h4M9 15l3 3 3-3M12 10v8',
+  open:'M3 6h6l2 2h10v11H3z', save:'M12 4v11M7 10l5 5 5-5M4 20h16', minus:'M6 12h12', plus:'M12 6v12M6 12h12',
+  fit:'M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5', pages:'M4 4h6v7H4zM4 14h6v6H4zM14 4h6v16h-6z', dup:'M8 8h12v12H8zM4 16V4h12'
+};
+const TOOLS = [
+  ['select','Select & move','V'],['edittext','Edit existing text','E'],['text','Add text','T'],['sep'],
+  ['draw','Draw','D'],['highlight','Highlight','H'],['whiteout','White-out','W'],['sep'],
+  ['rect','Rectangle','R'],['ellipse','Ellipse','O'],['line','Line','L'],['arrow','Arrow','A'],['sep'],
+  ['image','Insert image','I'],['sign','Fill & sign','S']
+];
+// Font library. v = available files: r regular, b bold, i italic, X bold italic. note = which common font it stands in for.
+const SANS='Arial, "Liberation Sans", sans-serif', SERIF='"Times New Roman", "Liberation Serif", serif', MONO='"Courier New", monospace', SCRIPT='cursive';
+const FONT_LIB = [
+  ['Standard PDF', [['Helvetica',null,'rbiX',SANS,'built in'],['Times',null,'rbiX',SERIF,'built in'],['Courier',null,'rbiX',MONO,'built in']]],
+  ['Sans serif', [['Arimo','arimo','rbiX',SANS,'Arial match'],['Carlito','carlito','rbiX',SANS,'Calibri match'],['Roboto','roboto','rbiX',SANS],['Open Sans','open-sans','rbiX',SANS],['Lato','lato','rbiX',SANS],
+    ['Montserrat','montserrat','rbiX',SANS],['Poppins','poppins','rbiX',SANS],['Inter','inter','rbiX',SANS],['Noto Sans','noto-sans','rbiX',SANS],['Source Sans 3','source-sans-3','rbiX',SANS],
+    ['PT Sans','pt-sans','rbiX',SANS],['Raleway','raleway','rbiX',SANS],['Nunito','nunito','rbiX',SANS],['Work Sans','work-sans','rbiX',SANS],['Oswald','oswald','rb',SANS]]],
+  ['Serif', [['Tinos','tinos','rbiX',SERIF,'Times New Roman match'],['Caladea','caladea','rbiX',SERIF,'Cambria match'],['Gelasio','gelasio','rbiX',SERIF,'Georgia match'],['Merriweather','merriweather','rbiX',SERIF],
+    ['Lora','lora','rbiX',SERIF],['Playfair Display','playfair-display','rbiX',SERIF],['EB Garamond','eb-garamond','rbiX',SERIF],['Libre Baskerville','libre-baskerville','rbiX',SERIF],['PT Serif','pt-serif','rbiX',SERIF],['Roboto Slab','roboto-slab','rb',SERIF]]],
+  ['Monospace', [['Cousine','cousine','rbiX',MONO,'Courier New match'],['Roboto Mono','roboto-mono','rbiX',MONO],['Source Code Pro','source-code-pro','rbiX',MONO]]],
+  ['Handwriting', [['Dancing Script','dancing-script','rb',SCRIPT],['Caveat','caveat','rb',SCRIPT],['Pacifico','pacifico','r',SCRIPT],['Great Vibes','great-vibes','r',SCRIPT]]],
+  ['Urdu & Arabic', [['Noto Nastaliq Urdu','noto-nastaliq-urdu','rb',SERIF],['Noto Naskh Arabic','noto-naskh-arabic','rb',SERIF]]]
+];
+const STD = {Helvetica:['Helvetica','HelveticaBold','HelveticaOblique','HelveticaBoldOblique'], Times:['TimesRoman','TimesRomanBold','TimesRomanItalic','TimesRomanBoldItalic'], Courier:['Courier','CourierBold','CourierOblique','CourierBoldOblique']};
+const FONTS = {};
+FONT_LIB.forEach(([grp,list])=>list.forEach(([name,slug,v,fb,note])=>{
+  FONTS[name] = {slug, v, grp, note, std:slug?null:STD[name],
+    css: slug ? `"${name}", ${fb}` : name==='Helvetica' ? 'Helvetica, Arial, "Liberation Sans", sans-serif' : name==='Times' ? '"Times New Roman", Times, "Liberation Serif", serif' : '"Courier New", Courier, "Liberation Mono", monospace'};
+}));
+function variantKey(F,bold,italic){
+  if(bold&&italic&&F.v.includes('X')) return 'bi';
+  if(bold&&F.v.includes('b')) return 'b';
+  if(italic&&F.v.includes('i')) return 'i';
+  return 'r';
+}
+// Map a PDF font name (e.g. "ABCDEF+Calibri-BoldItalic") to the closest font in the library.
+const COMPAT = [
+  [/^helvetica/, 'Helvetica', true, true], [/^times([-,]|roman$|$)/, 'Times', true, true], [/^courier([-,]|$)/, 'Courier', true, true],
+  [/couriernew|liberationmono|nimbusmono|cousine/, 'Cousine'], [/consolas|menlo|monaco|dejavusansmono|lucidaconsole|andalemono|ubuntumono/, 'Roboto Mono'],
+  [/arial|liberationsans|nimbussans|arimo|helv/, 'Arimo'], [/timesnewroman|liberationserif|nimbusrom|tinos|^times/, 'Tinos'],
+  [/calibri|carlito/, 'Carlito'], [/cambria|caladea/, 'Caladea'], [/georgia|gelasio/, 'Gelasio'],
+  [/garamond/, 'EB Garamond'], [/baskerville/, 'Libre Baskerville'], [/palatino|bookantiqua|pala|minion|charter|bookman|sourceserif|century(schoolbook)?$/, 'PT Serif'],
+  [/myriad|sourcesans/, 'Source Sans 3'], [/segoe|verdana|tahoma|trebuchet|frutiger|dejavusans|notosans|lucidasans|corbel|candara/, 'Noto Sans'],
+  [/centurygothic|futura|avenir|gotham|proxima|gilroy/, 'Montserrat'], [/rockwell|courierprime|slab|museo/, 'Roboto Slab'],
+  [/nastaliq|nastaleeq|noori|jameel|urdu/, 'Noto Nastaliq Urdu'], [/naskh|arabic|traditionalarabic|scheherazade|amiri/, 'Noto Naskh Arabic'],
+  [/brush|script|hand|comic/, 'Dancing Script']
+];
+const FAMILY_KEYS = Object.keys(FONTS).filter(n=>FONTS[n].slug).map(n=>[n, n.toLowerCase().replace(/[^a-z0-9]/g,'')]).sort((a,b)=>b[1].length-a[1].length);
+function matchFont(raw, flags={}, sample=''){
+  const name = (raw||'').replace(/^[A-Z]{6}\+/,'').replace(/[-_]\d{3,}$/,'');
+  const key = name.toLowerCase().replace(/[^a-z0-9]/g,''), low = name.toLowerCase();
+  const bold = /bold|black|heavy|semibold|demi|extrabold|ultra|w[6-9]$/i.test(name) || !!flags.bold || !!flags.black;
+  const italic = /italic|oblique|ital|-it$|slanted/i.test(name) || !!flags.italic;
+  let font=null, exact=false;
+  for(const [fam,k] of FAMILY_KEYS){ if(key.startsWith(k) || key.includes(k)){ font=fam; exact=true; break; } }
+  if(!font) for(const [re,fam,ex,raw] of COMPAT){ if(re.test(raw?low:key)){ font=fam; exact=!!ex; break; } }
+  if(/[؀-ۿݐ-ݿﭐ-﷿ﹰ-﻿]/.test(sample) && !(font&&FONTS[font].grp==='Urdu & Arabic')) font = /[ٹڈڑںھہے]/.test(sample) ? 'Noto Nastaliq Urdu' : 'Noto Naskh Arabic';
+  if(!font) font = flags.isMonospace||flags.fallbackName==='monospace' ? 'Cousine' : (flags.isSerifFont||flags.fallbackName==='serif') ? 'Tinos' : 'Arimo';
+  const pretty = name.replace(/[-_,]+/g,' ').replace(/([a-z])([A-Z])/g,'$1 $2').replace(/\s*MT$|\s*PSMT$|\s*PS$/,'').trim() || 'Unnamed font';
+  return {font, bold, italic, exact, src: pretty};
+}
+const fontBytes = {};
+async function loadFontBytes(slug, vk){
+  const k=slug+'-'+vk; if(fontBytes[k]) return fontBytes[k];
+  const r = await fetch(`fonts/${k}.ttf`); if(!r.ok) throw new Error('Font file missing: '+k);
+  return fontBytes[k] = new Uint8Array(await r.arrayBuffer());
+}
+const COMPLEX = /[֐-ࣿऀ-෿฀-࿿က-႟יִ-﻿]/;
+const SWATCH = ['#111111','#c4382c','#1f5fbf','#1d7a46','#e07b00','#7a3fb5','#ffffff'];
+const HLS = ['#ffe14d','#9be36b','#7fd6ff','#ff9ec4','#ffb35c'];
+
+// ---------- state ----------
+let sources = {};          // key -> {bytes, doc, name}
+let images = {};           // id -> {url, kind}
+let pages = [];            // {id, src, index, w, h, base, rot, annots:[]}
+let docName = 'document.pdf', isSample = true;
+let tool = 'select', selId = null, editingId = null, curPage = 0;
+let zoom = 1, pending = null, lastSig = null;
+let undoStack = [], redoStack = [];
+const textCache = {};      // pageId -> items
+const pageEls = {};        // pageId -> {pg, pgi, canvas, ov, rs}
+const props = {color:'#111111', width:2, size:14, font:'Helvetica', bold:false, italic:false, fill:null, opacity:1, hl:'#ffe14d', wo:'#ffffff'};
+const uid = () => Math.random().toString(36).slice(2,10);
+const K = () => zoom * 4/3;  // CSS px per PDF point
+
+// ---------- helpers ----------
+function toast(msg, ms=2600){ const t=document.createElement('div'); t.className='toast'; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(), ms); }
+function hexRgb(h){ h=h.replace('#',''); if(h.length===3) h=h.split('').map(c=>c+c).join(''); const n=parseInt(h,16); return [(n>>16&255)/255,(n>>8&255)/255,(n&255)/255]; }
+function pageById(id){ return pages.find(p=>p.id===id); }
+function findAnnot(id){ for(const p of pages){ const a=p.annots.find(a=>a.id===id); if(a) return [p,a]; } return [null,null]; }
+function snapshot(){ undoStack.push(JSON.stringify(pages)); if(undoStack.length>100) undoStack.shift(); redoStack=[]; updUndo(); }
+function updUndo(){ $('#bUndo').disabled=!undoStack.length; $('#bRedo').disabled=!redoStack.length; }
+function structKey(ps){ return ps.map(p=>p.id+':'+p.rot).join('|'); }
+function restore(json){
+  const before = structKey(pages); pages = JSON.parse(json); selId=null; editingId=null;
+  if(structKey(pages)===before) pages.forEach(renderOverlay); else { buildViewer(); buildThumbs(); }
+  renderProps();
+}
+function undo(){ if(!undoStack.length) return; commitEdit(); redoStack.push(JSON.stringify(pages)); restore(undoStack.pop()); updUndo(); }
+function redo(){ if(!redoStack.length) return; undoStack.push(JSON.stringify(pages)); restore(redoStack.pop()); updUndo(); }
+
+const mctx = document.createElement('canvas').getContext('2d');
+function cssFont(a, px){ return `${a.italic?'italic ':''}${a.bold?'700 ':'400 '}${px}px ${(FONTS[a.font]||FONTS.Helvetica).css}`; }
+function baseOff(a){ // distance from the text box top to the first baseline, in pt
+  mctx.font = cssFont(a,100); const m = mctx.measureText('Hg');
+  let asc=m.fontBoundingBoxAscent, desc=m.fontBoundingBoxDescent; if(!asc){asc=90.5;desc=21.2;}
+  return ((120-(asc+desc))/2 + asc) * a.size/100;
+}
+function smooth(pts){
+  if(!pts.length) return ''; const f=n=>Math.round(n*10)/10;
+  if(pts.length<3) return `M${f(pts[0][0])} ${f(pts[0][1])}` + pts.slice(1).map(p=>` L${f(p[0])} ${f(p[1])}`).join('') + (pts.length===1?` L${f(pts[0][0]+.1)} ${f(pts[0][1])}`:'');
+  let d=`M${f(pts[0][0])} ${f(pts[0][1])}`;
+  for(let i=1;i<pts.length-1;i++){ const mx=(pts[i][0]+pts[i+1][0])/2, my=(pts[i][1]+pts[i+1][1])/2; d+=` Q${f(pts[i][0])} ${f(pts[i][1])} ${f(mx)} ${f(my)}`; }
+  const l=pts[pts.length-1]; return d+` L${f(l[0])} ${f(l[1])}`;
+}
+function arrowD(a){
+  const ang=Math.atan2(a.y2-a.y1,a.x2-a.x1), L=Math.max(8,a.width*4), s=0.45;
+  const hx1=a.x2-L*Math.cos(ang-s), hy1=a.y2-L*Math.sin(ang-s), hx2=a.x2-L*Math.cos(ang+s), hy2=a.y2-L*Math.sin(ang+s);
+  return `M${a.x1} ${a.y1} L${a.x2} ${a.y2} M${hx1} ${hy1} L${a.x2} ${a.y2} L${hx2} ${hy2}`;
+}
+function pathD(a){ return a.type==='ink'?smooth(a.pts): a.type==='arrow'?arrowD(a): `M${a.x1} ${a.y1} L${a.x2} ${a.y2}`; }
+function vecBox(a){
+  let xs,ys; if(a.type==='ink'){ xs=a.pts.map(p=>p[0]); ys=a.pts.map(p=>p[1]); } else { xs=[a.x1,a.x2]; ys=[a.y1,a.y2]; }
+  const pad=a.width/2+2; const x=Math.min(...xs)-pad, y=Math.min(...ys)-pad; return {x,y,w:Math.max(...xs)+pad-x,h:Math.max(...ys)+pad-y};
+}
+const isBox = t => ['rect','ellipse','highlight','whiteout','image'].includes(t);
+const isVec = t => ['ink','line','arrow'].includes(t);
+const esc = s => s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+// ---------- loading ----------
+async function addSource(bytes, name){
+  const key = uid();
+  const doc = await pdfjsLib.getDocument({data: bytes.slice(), isEvalSupported:false, fontExtraProperties:true}).promise;
+  sources[key] = {bytes, doc, name};
+  const out = [];
+  for(let i=1;i<=doc.numPages;i++){
+    const pp = await doc.getPage(i); const v = pp.view;
+    out.push({id:uid(), src:key, index:i-1, w:v[2]-v[0], h:v[3]-v[1], base:pp.rotate||0, rot:0, annots:[]});
+  }
+  return out;
+}
+async function openBytes(bytes, name, sample=false){
+  $('#loading').hidden=false; $('#loading').textContent='Opening '+name+'…';
+  try{
+    const newPages = await addSource(bytes, name);
+    Object.keys(sources).forEach(k=>{ if(!newPages.some(p=>p.src===k)){ try{sources[k].doc.destroy();}catch(e){} delete sources[k]; }});
+    pages = newPages; docName = name; isSample = sample; undoStack=[]; redoStack=[]; selId=null; curPage=0; updUndo();
+    for(const k in textCache) delete textCache[k];
+    $('#loading').hidden=true;
+    zoom = fitZoom(); buildViewer(); buildThumbs(); renderName(); renderProps(); $('#viewer').scrollTop=0;
+  }catch(err){
+    $('#loading').hidden=true;
+    toast(err && err.name==='PasswordException' ? 'This PDF is password-protected. Remove the password and try again.' : 'Could not open this file. Make sure it is a valid PDF.', 4000);
+    if(!pages.length) loadSample();
+  }
+}
+function renderName(){
+  $('#fname').innerHTML = `<b>${esc(docName)}</b>` + (isSample?'<span class="chip">Sample</span>':'') + ` · ${pages.length} page${pages.length===1?'':'s'}`;
+  $('#pcount').textContent = pages.length;
+}
+async function readFile(f){ return new Uint8Array(await f.arrayBuffer()); }
+
+// ---------- viewer ----------
+let io;
+function fitZoom(){
+  const vw = $('#viewer').clientWidth - 48; const mw = Math.max(...pages.map(p=>dispDims(p)[0]), 300);
+  return Math.max(0.25, Math.min(2, vw/(mw*4/3)));
+}
+function totalRot(p){ return ((p.base+p.rot)%360+360)%360; }
+function dispDims(p){ const r=totalRot(p); return (r===90||r===270)?[p.h,p.w]:[p.w,p.h]; }
+function buildViewer(){
+  const stack=$('#stack'); stack.innerHTML=''; for(const k in pageEls) delete pageEls[k];
+  if(io) io.disconnect();
+  io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting) renderPage(e.target.dataset.pid); }),{root:$('#viewer'),rootMargin:'600px 0px'});
+  const k=K();
+  pages.forEach(p=>{
+    const [dw,dh]=dispDims(p);
+    const pg=document.createElement('div'); pg.className='pg'; pg.dataset.pid=p.id; pg.style.width=dw*k+'px'; pg.style.height=dh*k+'px';
+    const pgi=document.createElement('div'); pgi.className='pgi'; pgi.dataset.pid=p.id;
+    pgi.style.width=p.w*k+'px'; pgi.style.height=p.h*k+'px'; pgi.style.transform=`translate(-50%,-50%) rotate(${totalRot(p)}deg)`;
+    const canvas=document.createElement('canvas'); const ov=document.createElement('div'); ov.className='ov';
+    pgi.append(canvas,ov); pg.append(pgi); stack.append(pg);
+    pageEls[p.id]={pg,pgi,canvas,ov,rs:0};
+    renderOverlay(p); io.observe(pg);
+  });
+  $('#zVal').textContent=Math.round(zoom*100)+'%';
+  updPageNum();
+}
+async function renderPage(pid){
+  const p=pageById(pid), el=pageEls[pid]; if(!p||!el) return;
+  const k=K(); if(el.rs===k) return; el.rs=k;
+  const dpr=Math.min(window.devicePixelRatio||1, 2.5);
+  let scale=k*dpr; const maxPx=16e6; if(p.w*p.h*scale*scale>maxPx) scale=Math.sqrt(maxPx/(p.w*p.h));
+  const c=el.canvas; c.width=Math.round(p.w*scale); c.height=Math.round(p.h*scale);
+  const ctx=c.getContext('2d',{willReadFrequently:true});
+  if(!p.src){ ctx.fillStyle='#fff'; ctx.fillRect(0,0,c.width,c.height); return; }
+  try{
+    const pp=await sources[p.src].doc.getPage(p.index+1);
+    if(pageEls[pid]!==el) return;
+    const vp=pp.getViewport({scale, rotation:0});
+    await pp.render({canvasContext:ctx, viewport:vp}).promise;
+    if(!textCache[pid]) await loadText(p, pp);
+  }catch(e){ /* page replaced during render */ }
+}
+async function loadText(p, pp){
+  const tc = await pp.getTextContent(); const vp = pp.getViewport({scale:1, rotation:0}); const items=[];
+  for(const it of tc.items){
+    if(!it.str || !it.str.trim()) continue;
+    const tx = pdfjsLib.Util.transform(vp.transform, it.transform);
+    if(Math.abs(tx[1])>0.01 || Math.abs(tx[2])>0.01) continue; // horizontal text only
+    const size = Math.hypot(tx[2],tx[3]); if(size<2) continue;
+    const st = tc.styles[it.fontName]||{}; let fo=null;
+    try{ fo=pp.commonObjs.get(it.fontName); }catch(e){}
+    const m = matchFont(fo&&fo.name, {bold:fo&&fo.bold, black:fo&&fo.black, italic:fo&&fo.italic, isMonospace:fo&&fo.isMonospace, isSerifFont:fo&&fo.isSerifFont, fallbackName:(fo&&fo.fallbackName)||st.fontFamily}, it.str);
+    items.push({str:it.str, x:tx[4], base:tx[5], size, w:it.width*vp.scale, font:m.font, bold:m.bold, italic:m.italic, exact:m.exact, src:m.src, done:false});
+  }
+  textCache[p.id]=items; if(tool==='edittext') renderOverlay(p);
+}
+
+function renderOverlay(p){
+  const el=pageEls[p.id]; if(!el) return; const k=K(); const ov=el.ov; let html='';
+  let svg='';
+  for(const a of p.annots){
+    const sel = a.id===selId ? ' sel':'';
+    if(isBox(a.type)){
+      let st=`left:${a.x*k}px;top:${a.y*k}px;width:${a.w*k}px;height:${a.h*k}px;opacity:${a.opacity??1};`;
+      let inner='', cls='an';
+      if(a.type==='rect'||a.type==='ellipse'){ st+=`border:${a.width*k}px solid ${a.width>0?a.color:'transparent'};background:${a.fill||'transparent'};`; if(a.type==='ellipse') st+='border-radius:50%;'; }
+      else if(a.type==='highlight'){ st+=`background:${a.color};opacity:.4;`; cls+=' hl'; }
+      else if(a.type==='whiteout'){ st+=`background:${a.fill};`; }
+      else if(a.type==='image'){ inner=`<img src="${images[a.img]?.url||''}" alt="" draggable="false">`; }
+      html+=`<div class="${cls}${sel}" data-aid="${a.id}" style="${st}">${inner}${sel&&tool==='select'?'<div class="hdl"></div>':''}</div>`;
+    } else if(a.type==='text'){
+      const st=`left:${a.x*k}px;top:${a.y*k}px;font:${cssFont(a,a.size*k).replace(/"/g,"'")};line-height:1.2;color:${a.color};`;
+      html+=`<div dir="auto" class="an txt${sel}" data-aid="${a.id}" style="${st}">${esc(a.text)}${sel&&tool==='select'?'<div class="hdl"></div>':''}</div>`;
+    } else if(isVec(a.type)){
+      const d=pathD(a);
+      svg+=`<path d="${d}" stroke="${a.color}" stroke-width="${a.width}" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="${a.opacity??1}"/>`;
+      svg+=`<path class="hit" data-aid="${a.id}" d="${d}" stroke-width="${Math.max(a.width,10)}"/>`;
+      if(sel){ const b=vecBox(a); svg+=`<rect x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" fill="none" stroke="#2f7de1" stroke-width="${1.2/k}" stroke-dasharray="${4/k} ${3/k}"/>`; }
+    }
+  }
+  if(tool==='edittext' && textCache[p.id]){
+    textCache[p.id].forEach((t,i)=>{ if(t.done) return;
+      html+=`<div class="ti" data-ti="${i}" title="Click to edit" style="left:${(t.x-1)*k}px;top:${(t.base-t.size*0.86)*k}px;width:${(t.w+2)*k}px;height:${t.size*1.12*k}px"></div>`; });
+  }
+  ov.innerHTML = `<svg class="vec" viewBox="0 0 ${p.w} ${p.h}" preserveAspectRatio="none">${svg}</svg>` + html;
+  if(editingId){ const [ep]=findAnnot(editingId); if(ep===p) startEdit(editingId,false,true); }
+}
+
+// ---------- coordinates ----------
+function toLocal(pid, e){
+  const p=pageById(pid), el=pageEls[pid], k=K(); const r=el.pgi.getBoundingClientRect();
+  const cx=r.left+r.width/2, cy=r.top+r.height/2, dx=e.clientX-cx, dy=e.clientY-cy;
+  const t=totalRot(p)*Math.PI/180, c=Math.cos(t), s=Math.sin(t);
+  const lx=dx*c+dy*s, ly=-dx*s+dy*c;
+  return [(lx + p.w*k/2)/k, (ly + p.h*k/2)/k];
+}
+
+// ---------- selection / editing ----------
+function select(id){ if(selId===id) return; const prev=selId; selId=id;
+  [prev,id].forEach(x=>{ if(!x) return; const [p]=findAnnot(x); if(p) renderOverlay(p); }); renderProps(); }
+function startEdit(id, selectAll=false, reattach=false){
+  const [p,a]=findAnnot(id); if(!a||a.type!=='text') return;
+  editingId=id; const el=pageEls[p.id].ov.querySelector(`[data-aid="${id}"]`); if(!el) return;
+  el.querySelector('.hdl')?.remove();
+  try{ el.contentEditable='plaintext-only'; }catch(e){ el.contentEditable='true'; }
+  if(el.contentEditable!=='plaintext-only') el.contentEditable='true';
+  el.spellcheck=false; el.focus();
+  const r=document.createRange(); r.selectNodeContents(el); if(!selectAll) r.collapse(false);
+  const s=getSelection(); s.removeAllRanges(); s.addRange(r);
+  if(reattach) return;
+  el.addEventListener('blur', ()=>commitEdit(), {once:true});
+  el.addEventListener('keydown', ev=>{ if(ev.key==='Escape'){ ev.preventDefault(); el.blur(); } ev.stopPropagation(); });
+  el.addEventListener('input', ()=>{ a.text=el.innerText.replace(/\n$/,''); });
+}
+function commitEdit(){
+  if(!editingId) return; const id=editingId; editingId=null;
+  const [p,a]=findAnnot(id); if(!a) return;
+  const el=pageEls[p.id]?.ov.querySelector(`[data-aid="${id}"]`);
+  if(el) a.text=el.innerText.replace(/\n$/,'');
+  if(!a.text.trim()){ p.annots=p.annots.filter(x=>x!==a); if(selId===id) selId=null; }
+  renderOverlay(p); renderProps();
+}
+function deleteSel(){ if(!selId) return; const [p,a]=findAnnot(selId); if(!a) return; snapshot(); p.annots=p.annots.filter(x=>x!==a); selId=null; renderOverlay(p); renderProps(); }
+function dupSel(){ if(!selId) return; const [p,a]=findAnnot(selId); if(!a) return; snapshot();
+  const b=JSON.parse(JSON.stringify(a)); b.id=uid(); moveAnnot(b,12,12); p.annots.push(b); selId=b.id; renderOverlay(p); renderProps(); }
+function moveAnnot(a,dx,dy){
+  if(a.type==='ink') a.pts=a.pts.map(q=>[q[0]+dx,q[1]+dy]);
+  else if(a.type==='line'||a.type==='arrow'){ a.x1+=dx;a.y1+=dy;a.x2+=dx;a.y2+=dy; }
+  else { a.x+=dx; a.y+=dy; }
+}
+
+// ---------- pointer interactions ----------
+const viewer=$('#viewer');
+viewer.addEventListener('pointerdown', e=>{
+  if(e.button!==0) return;
+  if(e.target.closest('[contenteditable]')) return;
+  const pgi=e.target.closest('.pgi');
+  if(editingId){ commitEdit(); if(tool==='text'&&pgi){ e.preventDefault(); return; } }
+  if(!pgi){ if(tool==='select') select(null); return; }
+  const pid=pgi.dataset.pid, p=pageById(pid); setCur(pages.indexOf(p));
+  const pt=toLocal(pid,e); const aEl=e.target.closest('[data-aid]'); const aid=aEl?.dataset.aid;
+  const a = aid ? p.annots.find(x=>x.id===aid) : null;
+
+  if(tool==='place' && pending){ e.preventDefault(); placePending(p, pt); return; }
+  if(tool==='edittext'){
+    const ti=e.target.closest('.ti'); if(ti){ e.preventDefault(); replaceText(p, +ti.dataset.ti); return; }
+    if(a&&a.type==='text'){ e.preventDefault(); select(a.id); startEdit(a.id); return; }
+    return;
+  }
+  if(tool==='select'){
+    if(e.target.classList.contains('hdl') && a){ e.preventDefault(); return dragResize(e,p,a,pt); }
+    if(a){ e.preventDefault(); select(a.id); return dragMove(e,p,a,pt); }
+    select(null); return;
+  }
+  if(tool==='text'){
+    e.preventDefault();
+    if(a&&a.type==='text'){ select(a.id); startEdit(a.id); return; }
+    snapshot();
+    const t={id:uid(), type:'text', text:'', x:pt[0], y:pt[1], size:props.size, font:props.font, bold:props.bold, italic:props.italic, color:props.color};
+    t.y -= baseOff(t)*0.75; p.annots.push(t); selId=t.id; renderOverlay(p); renderProps(); startEdit(t.id);
+    // remove the undo entry if nothing gets typed
+    const n=undoStack.length; const chk=()=>{ if(!p.annots.includes(t) && undoStack.length===n) { undoStack.pop(); updUndo(); } };
+    setTimeout(()=>{ const el=pageEls[p.id]?.ov.querySelector(`[data-aid="${t.id}"]`); el?.addEventListener('blur',()=>setTimeout(chk),{once:true}); });
+    return;
+  }
+  if(tool==='draw'){ e.preventDefault(); return dragInk(e,p,pt); }
+  if(['rect','ellipse','highlight','whiteout'].includes(tool)){ e.preventDefault(); return dragBox(e,p,pt); }
+  if(tool==='line'||tool==='arrow'){ e.preventDefault(); return dragLine(e,p,pt); }
+});
+viewer.addEventListener('dblclick', e=>{
+  const aEl=e.target.closest('[data-aid]'); if(!aEl||tool!=='select') return;
+  const [,a]=findAnnot(aEl.dataset.aid); if(a&&a.type==='text'){ select(a.id); startEdit(a.id); }
+});
+function track(e, onMove, onUp){
+  const mv=ev=>{ ev.preventDefault(); onMove(ev); }; const up=ev=>{ window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up); window.removeEventListener('pointercancel',up); onUp(ev); };
+  window.addEventListener('pointermove',mv,{passive:false}); window.addEventListener('pointerup',up); window.addEventListener('pointercancel',up);
+}
+function dragMove(e,p,a,pt){
+  let last=pt, moved=false;
+  track(e, ev=>{ const q=toLocal(p.id,ev); const dx=q[0]-last[0], dy=q[1]-last[1]; if(!moved&&Math.hypot(q[0]-pt[0],q[1]-pt[1])<1.5) return;
+    if(!moved){ snapshot(); moved=true; } moveAnnot(a,dx,dy); last=q; renderOverlay(p); }, ()=>{});
+}
+function dragResize(e,p,a,pt){
+  snapshot(); const k=K();
+  if(a.type==='text'){
+    const el=pageEls[p.id].ov.querySelector(`[data-aid="${a.id}"]`); const w0=el.offsetWidth/k, s0=a.size;
+    track(e, ev=>{ const q=toLocal(p.id,ev); const nw=Math.max(4, w0+(q[0]-pt[0])); a.size=Math.max(4, Math.round(s0*nw/w0*2)/2); renderOverlay(p); }, ()=>renderProps());
+    return;
+  }
+  const w0=a.w, h0=a.h, ar=w0/h0;
+  track(e, ev=>{ const q=toLocal(p.id,ev); a.w=Math.max(4,w0+q[0]-pt[0]); a.h=a.type==='image'&&!ev.shiftKey? a.w/ar : Math.max(4,h0+q[1]-pt[1]); renderOverlay(p); }, ()=>{});
+}
+function dragInk(e,p,pt){
+  const a={id:uid(), type:'ink', pts:[pt], color:props.color, width:props.width, opacity:props.opacity};
+  const ov=pageEls[p.id].ov; const svg=ov.querySelector('svg.vec');
+  const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+  path.setAttribute('stroke',a.color); path.setAttribute('stroke-width',a.width); path.setAttribute('fill','none'); path.setAttribute('stroke-linecap','round'); path.setAttribute('stroke-linejoin','round'); path.setAttribute('opacity',a.opacity);
+  svg.appendChild(path); path.setAttribute('d',smooth(a.pts));
+  track(e, ev=>{ const evs=ev.getCoalescedEvents?ev.getCoalescedEvents():[ev]; for(const ce of (evs.length?evs:[ev])){ const q=toLocal(p.id,ce); const l=a.pts[a.pts.length-1]; if(Math.hypot(q[0]-l[0],q[1]-l[1])>0.6) a.pts.push(q); } path.setAttribute('d',smooth(a.pts)); },
+    ()=>{ snapshot(); a.pts=simplify(a.pts,0.35); p.annots.push(a); renderOverlay(p); });
+}
+function simplify(pts,eps){ // Ramer–Douglas–Peucker
+  if(pts.length<3) return pts;
+  const dist=(p,a,b)=>{ const dx=b[0]-a[0],dy=b[1]-a[1]; const L=dx*dx+dy*dy; if(!L) return Math.hypot(p[0]-a[0],p[1]-a[1]); let t=((p[0]-a[0])*dx+(p[1]-a[1])*dy)/L; t=Math.max(0,Math.min(1,t)); return Math.hypot(p[0]-a[0]-t*dx,p[1]-a[1]-t*dy); };
+  let mx=0,idx=0; for(let i=1;i<pts.length-1;i++){ const d=dist(pts[i],pts[0],pts[pts.length-1]); if(d>mx){mx=d;idx=i;} }
+  if(mx>eps){ const l=simplify(pts.slice(0,idx+1),eps), r=simplify(pts.slice(idx),eps); return l.slice(0,-1).concat(r); }
+  return [pts[0],pts[pts.length-1]];
+}
+function dragBox(e,p,pt){
+  const t=tool; let a={id:uid(), type:t, x:pt[0], y:pt[1], w:0, h:0};
+  if(t==='rect'||t==='ellipse'){ Object.assign(a,{color:props.color,width:props.width,fill:props.fill,opacity:props.opacity}); }
+  if(t==='highlight') a.color=props.hl;
+  if(t==='whiteout') a.fill=props.wo;
+  p.annots.push(a); let started=false;
+  track(e, ev=>{ const q=toLocal(p.id,ev); a.x=Math.min(pt[0],q[0]); a.y=Math.min(pt[1],q[1]); a.w=Math.abs(q[0]-pt[0]); a.h=Math.abs(q[1]-pt[1]); started=true; renderOverlay(p); },
+    ()=>{ p.annots=p.annots.filter(x=>x!==a); if(!started||a.w<3||a.h<3){ renderOverlay(p); return; } snapshot(); p.annots.push(a); renderOverlay(p); });
+}
+function dragLine(e,p,pt){
+  const a={id:uid(), type:tool, x1:pt[0], y1:pt[1], x2:pt[0], y2:pt[1], color:props.color, width:props.width, opacity:props.opacity};
+  p.annots.push(a);
+  track(e, ev=>{ let q=toLocal(p.id,ev); if(ev.shiftKey){ const ang=Math.round(Math.atan2(q[1]-pt[1],q[0]-pt[0])/(Math.PI/4))*(Math.PI/4); const L=Math.hypot(q[0]-pt[0],q[1]-pt[1]); q=[pt[0]+L*Math.cos(ang),pt[1]+L*Math.sin(ang)]; } a.x2=q[0]; a.y2=q[1]; renderOverlay(p); },
+    ()=>{ p.annots=p.annots.filter(x=>x!==a); if(Math.hypot(a.x2-a.x1,a.y2-a.y1)<3){ renderOverlay(p); return; } snapshot(); p.annots.push(a); renderOverlay(p); });
+}
+
+// ---------- edit existing text ----------
+function sampleBg(p, x, y){
+  const el=pageEls[p.id]; const c=el.canvas; if(!c.width) return '#ffffff';
+  const sc=c.width/p.w; const ctx=c.getContext('2d');
+  const pts=[[x-2,y],[x,y-1],[x-2,y+2]];
+  try{ let r=0,g=0,b=0,n=0; for(const [px,py] of pts){ const d=ctx.getImageData(Math.max(0,Math.round(px*sc)),Math.max(0,Math.round(py*sc)),1,1).data; r+=d[0];g+=d[1];b+=d[2];n++; }
+    const h=v=>Math.round(v/n).toString(16).padStart(2,'0'); return '#'+h(r)+h(g)+h(b); }catch(e){ return '#ffffff'; }
+}
+function sampleInk(p, t, bg){ // dominant text color inside the item's box
+  const c=pageEls[p.id].canvas; if(!c.width) return '#111111';
+  const sc=c.width/p.w; const x=Math.max(0,Math.floor(t.x*sc)), y=Math.max(0,Math.floor((t.base-t.size*0.8)*sc));
+  const w=Math.max(1,Math.min(c.width-x,Math.ceil(t.w*sc))), h=Math.max(1,Math.min(c.height-y,Math.ceil(t.size*1.0*sc)));
+  try{
+    const d=c.getContext('2d').getImageData(x,y,w,h).data; const [br,bgc,bb]=hexRgb(bg).map(v=>v*255); const px=[];
+    const step = Math.max(1, Math.floor(d.length/4/40000));
+    for(let i=0;i<d.length;i+=4*step){ const dist=Math.abs(d[i]-br)+Math.abs(d[i+1]-bgc)+Math.abs(d[i+2]-bb); if(dist>90) px.push([dist,d[i],d[i+1],d[i+2]]); }
+    if(!px.length) return '#111111';
+    px.sort((a,b)=>b[0]-a[0]); const top=px.slice(0,Math.max(1,Math.ceil(px.length*0.3)));
+    const avg=j=>Math.round(top.reduce((s,q)=>s+q[j],0)/top.length);
+    const hx=v=>v.toString(16).padStart(2,'0'); return '#'+hx(avg(1))+hx(avg(2))+hx(avg(3));
+  }catch(e){ return '#111111'; }
+}
+const localFaces = {};
+function registerFace(name, vk){ // load the bundled TTF so screen and exported PDF use the same file
+  const F=FONTS[name]; if(!F||!F.slug) return Promise.resolve();
+  const k=F.slug+'-'+vk; if(localFaces[k]) return localFaces[k];
+  return localFaces[k]=(async()=>{ try{ const bytes=await loadFontBytes(F.slug,vk);
+    const ff=new FontFace(name, bytes.slice().buffer, {weight:vk.includes('b')?'700':'400', style:vk.includes('i')?'italic':'normal'});
+    await ff.load(); document.fonts.add(ff); }catch(e){} })();
+}
+const fontReady = (a, txt) => { const F=FONTS[a.font];
+  const reg = F&&F.slug ? registerFace(a.font, variantKey(F,a.bold,a.italic)) : Promise.resolve();
+  return Promise.race([reg.then(()=>document.fonts.load(cssFont(a,100), txt||'Hg')).catch(()=>{}), new Promise(r=>setTimeout(r,2500))]); };
+async function replaceText(p, i){
+  const t=textCache[p.id][i]; if(!t||t.done) return; t.done=true;
+  const top=t.base-t.size*0.86, h=t.size*1.12; const bg=sampleBg(p,t.x-1,top+1);
+  const a={id:uid(), type:'text', text:t.str, x:t.x, y:0, size:Math.round(t.size*10)/10, font:t.font, bold:t.bold, italic:t.italic,
+    color:sampleInk(p,t,bg), srcFont:t.src, exact:t.exact};
+  await fontReady(a, t.str);
+  snapshot();
+  p.annots.push({id:uid(), type:'whiteout', x:t.x-1, y:top, w:t.w+2, h, fill:bg});
+  a.y = t.base - baseOff(a); p.annots.push(a); selId=a.id;
+  renderOverlay(p); renderProps(); startEdit(a.id, true);
+}
+
+// ---------- images & signatures ----------
+function loadImage(file){
+  return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>{ const im=new Image(); im.onload=()=>{
+    const max=2200; let w=im.naturalWidth,h=im.naturalHeight; const s=Math.min(1,max/Math.max(w,h)); w=Math.round(w*s); h=Math.round(h*s);
+    const c=document.createElement('canvas'); c.width=w; c.height=h; c.getContext('2d').drawImage(im,0,0,w,h);
+    const jpg=/jpe?g/i.test(file.type); res({url:c.toDataURL(jpg?'image/jpeg':'image/png',0.92), kind:jpg?'jpg':'png', w, h}); }; im.onerror=rej; im.src=r.result; }; r.onerror=rej; r.readAsDataURL(file); });
+}
+function beginPlace(imgId, w, h, label){
+  pending={img:imgId, w, h}; setTool('place'); toast(label||'Click on a page to place it', 2200);
+}
+function placePending(p, pt){
+  snapshot(); const {img,w,h}=pending;
+  const a={id:uid(), type:'image', img, x:pt[0]-w/2, y:pt[1]-h/2, w, h, opacity:1};
+  p.annots.push(a); pending=null; selId=a.id; setTool('select'); renderOverlay(p); renderProps();
+}
+$('#fImg').addEventListener('change', async e=>{
+  const f=e.target.files[0]; e.target.value=''; if(!f) return;
+  try{ const im=await loadImage(f); const id=uid(); images[id]={url:im.url, kind:im.kind};
+    const p=pages[curPage]; const maxW=Math.min(p.w*0.5, im.w*0.75); const w=maxW, h=w*im.h/im.w; beginPlace(id,w,h,'Click on a page to place the image'); }
+  catch(err){ toast('Could not read that image file.'); setTool('select'); }
+});
+
+function signatureModal(){
+  const scrim=document.createElement('div'); scrim.className='scrim';
+  scrim.innerHTML=`<div class="modal" role="dialog" aria-modal="true" aria-labelledby="sigH">
+    <h2 id="sigH">Add your signature</h2>
+    ${lastSig?`<div class="saved-sig"><span class="hint">Use saved:</span><img id="sigSaved" src="${images[lastSig.id].url}" alt="Saved signature"></div>`:''}
+    <div class="tabs"><button class="on" data-t="draw">Draw</button><button data-t="type">Type</button></div>
+    <div id="sigDraw"><canvas class="pad" id="sigPad"></canvas></div>
+    <div id="sigType" hidden><input class="sigtype" id="sigName" placeholder="Your full name" value="Amina Siddiqui"><div class="sigprev" id="sigPrev" style="margin-top:8px">Amina Siddiqui</div></div>
+    <div class="mrow"><div class="grow"><span class="hint">Ink</span>${['#111111','#14306b','#1f5fbf'].map((c,i)=>`<button class="sw${i===1?' on':''}" data-ink="${c}" style="background:${c}" aria-label="Ink ${c}"></button>`).join('')}<button class="btn" id="sigClear" style="margin-left:6px">Clear</button></div>
+      <button class="btn" id="sigCancel">Cancel</button><button class="btn primary" id="sigOk">Place signature</button></div></div>`;
+  document.body.appendChild(scrim);
+  let ink='#14306b', mode='draw', strokes=[], cur=null;
+  const pad=scrim.querySelector('#sigPad'); const dpr=window.devicePixelRatio||1;
+  const fit=()=>{ const r=pad.getBoundingClientRect(); pad.width=r.width*dpr; pad.height=r.height*dpr; redraw(); };
+  const redraw=()=>{ const c=pad.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0); c.clearRect(0,0,pad.width,pad.height);
+    c.strokeStyle='#d6dbe0'; c.lineWidth=1; c.beginPath(); c.moveTo(20,140); c.lineTo(pad.width/dpr-20,140); c.stroke();
+    c.strokeStyle=ink; c.lineWidth=2.6; c.lineCap='round'; c.lineJoin='round';
+    for(const s of strokes){ c.beginPath(); s.forEach((q,i)=>i?c.lineTo(q[0],q[1]):c.moveTo(q[0],q[1])); if(s.length===1) c.lineTo(s[0][0]+.1,s[0][1]); c.stroke(); } };
+  requestAnimationFrame(fit);
+  pad.addEventListener('pointerdown',e=>{ e.preventDefault(); pad.setPointerCapture(e.pointerId); const r=pad.getBoundingClientRect(); cur=[[e.clientX-r.left,e.clientY-r.top]]; strokes.push(cur); redraw(); });
+  pad.addEventListener('pointermove',e=>{ if(!cur) return; const r=pad.getBoundingClientRect(); cur.push([e.clientX-r.left,e.clientY-r.top]); redraw(); });
+  pad.addEventListener('pointerup',()=>cur=null);
+  const close=()=>{ scrim.remove(); if(tool==='sign') setTool('select'); };
+  scrim.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{ mode=b.dataset.t; scrim.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b)); scrim.querySelector('#sigDraw').hidden=mode!=='draw'; scrim.querySelector('#sigType').hidden=mode!=='type'; if(mode==='draw') requestAnimationFrame(fit); });
+  scrim.querySelectorAll('[data-ink]').forEach(b=>b.onclick=()=>{ ink=b.dataset.ink; scrim.querySelectorAll('[data-ink]').forEach(x=>x.classList.toggle('on',x===b)); scrim.querySelector('#sigPrev').style.color=ink; redraw(); });
+  const nm=scrim.querySelector('#sigName'); nm.oninput=()=>scrim.querySelector('#sigPrev').textContent=nm.value||' ';
+  scrim.querySelector('#sigClear').onclick=()=>{ strokes=[]; nm.value=''; scrim.querySelector('#sigPrev').textContent=' '; redraw(); };
+  scrim.querySelector('#sigCancel').onclick=close;
+  scrim.addEventListener('pointerdown',e=>{ if(e.target===scrim) close(); });
+  scrim.querySelector('#sigSaved')?.addEventListener('click',()=>{ scrim.remove(); beginPlace(lastSig.id,lastSig.w,lastSig.h,'Click where the signature goes'); });
+  scrim.querySelector('#sigOk').onclick=async ()=>{
+    let c;
+    if(mode==='draw'){
+      if(!strokes.length){ toast('Draw your signature first.'); return; }
+      const xs=strokes.flat().map(q=>q[0]), ys=strokes.flat().map(q=>q[1]); const pd=4, S=3;
+      const x0=Math.min(...xs)-pd, y0=Math.min(...ys)-pd, w=Math.max(...xs)+pd-x0, h=Math.max(...ys)+pd-y0;
+      c=document.createElement('canvas'); c.width=Math.ceil(w*S); c.height=Math.ceil(h*S); const g=c.getContext('2d');
+      g.scale(S,S); g.translate(-x0,-y0); g.strokeStyle=ink; g.lineWidth=2.6; g.lineCap='round'; g.lineJoin='round';
+      for(const s of strokes){ g.beginPath(); s.forEach((q,i)=>i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1])); if(s.length===1) g.lineTo(s[0][0]+.1,s[0][1]); g.stroke(); }
+    } else {
+      const txt=nm.value.trim(); if(!txt){ toast('Type your name first.'); return; }
+      try{ await document.fonts.load('600 120px Caveat'); }catch(e){}
+      const g0=document.createElement('canvas').getContext('2d'); g0.font='600 120px Caveat, cursive'; const tw=g0.measureText(txt).width;
+      c=document.createElement('canvas'); c.width=Math.ceil(tw+40); c.height=170; const g=c.getContext('2d'); g.font='600 120px Caveat, cursive'; g.fillStyle=ink; g.textBaseline='alphabetic'; g.fillText(txt,20,125);
+    }
+    const id=uid(); images[id]={url:c.toDataURL('image/png'), kind:'png'};
+    const w=Math.min(170, c.width/3*0.75), h=w*c.height/c.width; lastSig={id,w,h};
+    scrim.remove(); beginPlace(id,w,h,'Click where the signature goes');
+  };
+}
+
+// ---------- tools & properties ----------
+function setTool(t){
+  if(t==='image'){ $('#fImg').click(); return; }
+  if(t==='sign'){ tool='sign'; signatureModal(); renderRail(); return; }
+  commitEdit();
+  if(t!=='place') pending=null;
+  tool=t; viewer.dataset.tool=t; if(t!=='select'&&t!=='text'&&t!=='edittext') selId=null;
+  renderRail(); pages.forEach(renderOverlay); renderProps();
+  if(t==='edittext'){ const missing=pages.some(p=>p.src&&!textCache[p.id]); if(missing) toast('Click any outlined text to edit it.'); else toast('Click any outlined text to edit it.'); }
+}
+function renderRail(){
+  $('#rail').innerHTML = TOOLS.map(([t,label,key])=> t==='sep' ? '<div class="sep"></div>' :
+    `<button class="tool${tool===t||(t==='sign'&&tool==='place'&&lastSig&&pending?.img===lastSig.id)?' on':''}" data-tool="${t}" aria-label="${label}">${ic(I[t])}<span class="tip">${label}<kbd>${key}</kbd></span></button>`).join('');
+}
+$('#rail').addEventListener('click', e=>{ const b=e.target.closest('[data-tool]'); if(b) setTool(b.dataset.tool); });
+
+function ctxType(){
+  if(selId){ const [,a]=findAnnot(selId); if(a) return a.type==='ink'?'draw':a.type; }
+  return tool;
+}
+function renderProps(){
+  const t=ctxType(); const [,a]=selId?findAnnot(selId):[null,null]; const v=(key,def)=> a&&a[key]!==undefined ? a[key] : (def!==undefined?def:props[key]);
+  let h='';
+  const colorGrp=(key,list,label)=>`<div class="grp"><label class="cap">${label}</label>${list.map(c=>`<button class="sw${v(key)===c?' on':''}" data-set="${key}" data-val="${c}" style="background:${c}" aria-label="${label} ${c}"></button>`).join('')}<input type="color" data-set="${key}" value="${/^#[0-9a-f]{6}$/i.test(v(key)||'')?v(key):'#000000'}" aria-label="Custom ${label.toLowerCase()}"></div>`;
+  if(['text','draw','rect','ellipse','line','arrow'].includes(t)) h+=colorGrp('color',SWATCH,'Color');
+  if(t==='highlight') h+=colorGrp(a?'color':'hl',HLS,'Highlight').replaceAll('data-set="color"', a?'data-set="color"':'data-set="hl"');
+  if(t==='whiteout'){ const key=a?'fill':'wo'; h+=`<div class="grp"><label class="cap">Fill</label>${['#ffffff','#f4f1e8','#eeeeee','#000000'].map(c=>`<button class="sw${v(key,props.wo)===c?' on':''}" data-set="${key}" data-val="${c}" style="background:${c}" aria-label="Fill ${c}"></button>`).join('')}<input type="color" data-set="${key}" value="${v(key,props.wo)}" aria-label="Custom fill"></div>`; }
+  if(['draw','rect','ellipse','line','arrow'].includes(t)) h+=`<div class="grp"><label class="cap" for="pw">Stroke</label><select id="pw" data-set="width">${[0.5,1,2,3,5,8,12].filter(n=>n>0||t==='rect').map(n=>`<option value="${n}"${+v('width')===n?' selected':''}>${n} pt</option>`).join('')}</select></div>`;
+  if(t==='rect'||t==='ellipse') h+=`<div class="grp"><label class="cap">Fill</label><button class="sw none${!v('fill')?' on':''}" data-set="fill" data-val="" aria-label="No fill"></button>${['#ffffff','#fde68a','#bfdbfe','#fecaca','#111111'].map(c=>`<button class="sw${v('fill')===c?' on':''}" data-set="fill" data-val="${c}" style="background:${c}" aria-label="Fill ${c}"></button>`).join('')}</div>`;
+  if(t==='text'||t==='edittext') h+=`<div class="grp"><select id="pf" data-set="font" aria-label="Font" style="max-width:190px;font-family:${esc((FONTS[v('font')]||FONTS.Helvetica).css)}">${FONT_LIB.map(([g,list])=>`<optgroup label="${g}">${list.map(([f,,,,note])=>`<option value="${f}" style="font-family:${esc(FONTS[f].css)}"${v('font')===f?' selected':''}>${f}${note&&note!=='built in'?' · '+note:''}</option>`).join('')}</optgroup>`).join('')}</select><input type="number" id="ps" data-set="size" min="4" max="200" step="0.5" value="${v('size')}" aria-label="Font size"><button class="tog${v('bold')?' on':''}" data-tog="bold" aria-label="Bold">B</button><button class="tog${v('italic')?' on':''}" data-tog="italic" aria-label="Italic" style="font-style:italic;font-family:serif">I</button></div>`;
+  if(t==='edittext') h+=colorGrp('color',SWATCH,'Color');
+  if(['draw','rect','ellipse','line','arrow','image'].includes(t)) h+=`<div class="grp"><label class="cap" for="po">Opacity</label><input type="range" id="po" data-set="opacity" min="0.1" max="1" step="0.05" value="${v('opacity',1)}"></div>`;
+  if(a) h+=`<div class="grp"><button class="ibtn" id="pDup" aria-label="Duplicate" title="Duplicate">${ic(I.dup)}</button><button class="ibtn" id="pDel" aria-label="Delete" title="Delete (Del)">${ic(I.trash)}</button></div>`;
+  const hints={select:a?(a.type==='text'?'Double-click to edit text · drag to move · corner resizes':'Drag to move · Del removes it'):'Click an item to select it. Pick a tool on the left to start editing.',
+    edittext:'Click any outlined text in the PDF to rewrite it.', text:'Click anywhere on a page to type.', draw:'Drag to draw freehand.', highlight:'Drag across text to highlight it.',
+    whiteout:'Drag over anything to cover it up.', rect:'Drag to draw a rectangle.', ellipse:'Drag to draw an ellipse.', line:'Drag to draw. Hold Shift to snap to 45°.', arrow:'Drag to draw an arrow. Hold Shift to snap.',
+    place:'Click on a page to place it. Esc cancels.', image:'', sign:'', ink:''};
+  let hint = a? (a.type==='text'?'Double-click to edit text · corner handle scales it':'Drag to move · Del removes it') : (hints[t]||'');
+  if(a&&a.type==='text'&&a.srcFont){
+    const same = a.exact && (a.font===a.detFont || !a.detFont);
+    hint = `<span class="det"><b>Original font:</b> ${esc(a.srcFont)}</span> ` + (a.font===(a.detFont||a.font) ? (a.exact ? '<span class="tag ok">Exact match</span>' : `<span class="tag">Closest match: ${esc(a.font)}${FONTS[a.font]?.note&&FONTS[a.font].note!=='built in'?' ('+FONTS[a.font].note+')':''}</span>`) : `<span class="tag">Changed to ${esc(a.font)}</span>`);
+  }
+  h+=`<span class="hint">${hint}</span>`;
+  $('#props').innerHTML=h;
+}
+function applyProp(key,val){
+  if(['size','width','opacity'].includes(key)) val=+val; if(key==='fill'&&val==='') val=null;
+  if(key==='hl'||key==='wo'){ props[key]=val; renderProps(); return; }
+  if(['font','bold','italic'].includes(key)) fontReady({...props,[key]:val});
+  props[key]=val;
+  if(selId && ['font','bold','italic'].includes(key)){ const [p,a]=findAnnot(selId); if(a&&a.type==='text'){
+    snapshot(); if(!a.detFont) a.detFont=a.font; const base=a.y+baseOff(a); a[key]=val;
+    fontReady(a,a.text).then(()=>{ a.y=base-baseOff(a); renderOverlay(p); }); renderOverlay(p); renderProps(); return; } }
+  if(selId){ const [p,a]=findAnnot(selId); if(a && (key in a || ['fill','opacity','bold','italic'].includes(key))){ snapshot(); a[key]=val; renderOverlay(p); } }
+  renderProps();
+}
+$('#props').addEventListener('click', e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.set&&b.dataset.val!==undefined) applyProp(b.dataset.set,b.dataset.val);
+  if(b.dataset.tog){ const [,a]=selId?findAnnot(selId):[null,null]; applyProp(b.dataset.tog, !(a?a[b.dataset.tog]:props[b.dataset.tog])); }
+  if(b.id==='pDel') deleteSel(); if(b.id==='pDup') dupSel();
+});
+$('#props').addEventListener('change', e=>{ const el=e.target; if(el.dataset.set) applyProp(el.dataset.set, el.value); });
+$('#props').addEventListener('pointerdown', e=>{ if(editingId && e.target.closest('button,select,input')) { /* keep editing target */ const id=editingId; commitEdit(); selId=id; } });
+
+// ---------- thumbnails & page ops ----------
+let thumbIO;
+function buildThumbs(){
+  const tl=$('#tlist'); tl.innerHTML=''; if(thumbIO) thumbIO.disconnect();
+  thumbIO=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ renderThumb(e.target); thumbIO.unobserve(e.target);} }),{root:tl,rootMargin:'300px'});
+  pages.forEach((p,i)=>{
+    const d=document.createElement('div'); d.className='th'+(i===curPage?' cur':''); d.dataset.pid=p.id; d.draggable=true;
+    const [dw,dh]=dispDims(p); const tw=110, th=tw*dh/dw; const c=document.createElement('canvas'); c.style.width=tw+'px'; c.style.height=th+'px';
+    d.append(c); const s=document.createElement('span'); s.textContent=i+1; d.append(s); tl.append(d); thumbIO.observe(d);
+  });
+  renderName(); updPageNum();
+}
+async function renderThumb(d){
+  const p=pageById(d.dataset.pid); if(!p) return; const c=d.querySelector('canvas'); const dpr=Math.min(2,window.devicePixelRatio||1);
+  const [dw]=dispDims(p); const sc=110/dw*dpr;
+  if(!p.src){ const [w,h]=dispDims(p); c.width=w*sc; c.height=h*sc; const g=c.getContext('2d'); g.fillStyle='#fff'; g.fillRect(0,0,c.width,c.height); return; }
+  try{ const pp=await sources[p.src].doc.getPage(p.index+1); const vp=pp.getViewport({scale:sc, rotation:totalRot(p)}); c.width=vp.width; c.height=vp.height; await pp.render({canvasContext:c.getContext('2d'), viewport:vp}).promise; }catch(e){}
+}
+$('#tlist').addEventListener('click', e=>{ const th=e.target.closest('.th'); if(!th) return; const i=pages.findIndex(p=>p.id===th.dataset.pid); setCur(i); pageEls[pages[i].id].pg.scrollIntoView({block:'start',behavior:'smooth'}); if(innerWidth<=760) toggleThumbs(false); });
+let dragPid=null;
+$('#tlist').addEventListener('dragstart', e=>{ const th=e.target.closest('.th'); dragPid=th?.dataset.pid; e.dataTransfer.effectAllowed='move'; try{e.dataTransfer.setData('text/plain','page');}catch(_){} });
+$('#tlist').addEventListener('dragover', e=>{ if(!dragPid) return; e.preventDefault(); const th=e.target.closest('.th'); document.querySelectorAll('.th').forEach(x=>x.classList.remove('drop-before','drop-after')); if(!th) return; const r=th.getBoundingClientRect(); th.classList.add(e.clientY<r.top+r.height/2?'drop-before':'drop-after'); });
+$('#tlist').addEventListener('drop', e=>{ e.preventDefault(); const th=e.target.closest('.th'); document.querySelectorAll('.th').forEach(x=>x.classList.remove('drop-before','drop-after')); if(!th||!dragPid||th.dataset.pid===dragPid){dragPid=null;return;}
+  const r=th.getBoundingClientRect(); const after=e.clientY>r.top+r.height/2; snapshot();
+  const mv=pages.find(p=>p.id===dragPid); pages=pages.filter(p=>p!==mv); let i=pages.findIndex(p=>p.id===th.dataset.pid); if(after) i++; pages.splice(i,0,mv); curPage=i; dragPid=null; buildViewer(); buildThumbs(); });
+$('#tlist').addEventListener('dragend', ()=>{ dragPid=null; document.querySelectorAll('.th').forEach(x=>x.classList.remove('drop-before','drop-after')); });
+
+function setCur(i){ if(i<0) return; curPage=i; document.querySelectorAll('.th').forEach((t,j)=>t.classList.toggle('cur',j===i)); updPageNum(); }
+function updPageNum(){ $('#pnum').textContent=`${Math.min(curPage+1,pages.length)} / ${pages.length}`; }
+viewer.addEventListener('scroll', ()=>{ const vr=viewer.getBoundingClientRect(); const mid=vr.top+vr.height*0.35; let best=0;
+  pages.forEach((p,i)=>{ const r=pageEls[p.id]?.pg.getBoundingClientRect(); if(r&&r.top<=mid) best=i; });
+  if(best!==curPage){ setCur(best); document.querySelector('.th.cur')?.scrollIntoView({block:'nearest'}); } }, {passive:true});
+
+const PAGEOPS=[['rotl','Rotate left'],['rotr','Rotate right'],['dup','Duplicate page'],['blank','Insert blank page after'],['merge','Insert pages from another PDF'],['trash','Delete page']];
+$('#pageops').innerHTML=PAGEOPS.map(([k,l])=>`<button class="ibtn" data-op="${k}" aria-label="${l}" title="${l}">${ic(I[k])}</button>`).join('');
+$('#pageops').addEventListener('click', e=>{
+  const b=e.target.closest('[data-op]'); if(!b) return; const op=b.dataset.op; const p=pages[curPage]; if(!p) return;
+  if(op==='merge'){ $('#fMerge').click(); return; }
+  if(op==='trash' && pages.length===1){ toast('A PDF needs at least one page.'); return; }
+  commitEdit(); snapshot();
+  if(op==='rotl') p.rot=(p.rot+270)%360;
+  if(op==='rotr') p.rot=(p.rot+90)%360;
+  if(op==='dup'){ const c=JSON.parse(JSON.stringify(p)); c.id=uid(); c.annots.forEach(a=>a.id=uid()); pages.splice(curPage+1,0,c); curPage++; }
+  if(op==='blank'){ const [w,h]=[p.w,p.h]; pages.splice(curPage+1,0,{id:uid(),src:null,index:0,w,h,base:totalRot(p)===90||totalRot(p)===270?90:0,rot:0,annots:[]}); curPage++; }
+  if(op==='trash'){ pages.splice(curPage,1); curPage=Math.min(curPage,pages.length-1); }
+  buildViewer(); buildThumbs(); requestAnimationFrame(()=>pageEls[pages[curPage].id]?.pg.scrollIntoView({block:'nearest'}));
+});
+$('#fMerge').addEventListener('change', async e=>{
+  const f=e.target.files[0]; e.target.value=''; if(!f) return;
+  try{ const np=await addSource(await readFile(f), f.name); snapshot(); pages.splice(curPage+1,0,...np); buildViewer(); buildThumbs(); toast(`Inserted ${np.length} page${np.length===1?'':'s'} from ${f.name}`); }
+  catch(err){ toast('Could not read that PDF.'); }
+});
+function toggleThumbs(force){ const t=$('#thumbs'); const show=force??t.hidden; t.hidden=!show; }
+
+// ---------- zoom ----------
+function setZoom(z){ const v=viewer; const ratio=v.scrollTop/(v.scrollHeight||1); zoom=Math.max(0.25,Math.min(4,z)); commitEdit(); buildViewer(); v.scrollTop=ratio*v.scrollHeight; }
+$('#zIn').onclick=()=>setZoom(zoom*1.2); $('#zOut').onclick=()=>setZoom(zoom/1.2); $('#zFit').onclick=()=>setZoom(fitZoom());
+viewer.addEventListener('wheel', e=>{ if(e.ctrlKey||e.metaKey){ e.preventDefault(); setZoom(zoom*(e.deltaY<0?1.1:1/1.1)); } }, {passive:false});
+
+// ---------- export ----------
+async function buildPdf(){
+  const {PDFDocument, StandardFonts, rgb, degrees, BlendMode, LineCapStyle} = PDFLib;
+  const out = await PDFDocument.create(); const loaded={}; const fonts={}; const imgs={};
+  const col=h=>rgb(...hexRgb(h));
+  for(const p of pages) if(p.src && !loaded[p.src]) loaded[p.src]=await PDFDocument.load(sources[p.src].bytes,{ignoreEncryption:true});
+  if(window.fontkit) out.registerFontkit(window.fontkit);
+  const getFont=async a=>{ const F=FONTS[a.font]||FONTS.Helvetica;
+    if(F.std){ const n=F.std[(a.bold?1:0)+(a.italic?2:0)]; return fonts[n]||(fonts[n]={pdf:await out.embedFont(StandardFonts[n]), std:true}); }
+    const k=F.slug+'-'+variantKey(F,a.bold,a.italic); if(fonts[k]) return fonts[k];
+    try{ const bytes=await loadFontBytes(F.slug, variantKey(F,a.bold,a.italic));
+      return fonts[k]={pdf:await out.embedFont(bytes,{subset:true}), fk:window.fontkit.create(bytes)}; }
+    catch(e){ console.warn(e); return fonts[k]={failed:true}; } };
+  const getImg=async id=>{ if(imgs[id]) return imgs[id]; const im=images[id]; return imgs[id]=(im.kind==='jpg'?await out.embedJpg(im.url):await out.embedPng(im.url)); };
+  for(const p of pages){
+    let page;
+    if(p.src){ [page]=await out.copyPages(loaded[p.src],[p.index]); out.addPage(page); } else page=out.addPage([p.w,p.h]);
+    page.setRotation(degrees(totalRot(p)));
+    const box = p.src ? page.getCropBox() : {x:0,y:0};
+    const X=x=>box.x+x, Y=y=>box.y+p.h-y;
+    for(const a of p.annots){
+      const op=a.opacity??1;
+      if(a.type==='whiteout') page.drawRectangle({x:X(a.x),y:Y(a.y+a.h),width:a.w,height:a.h,color:col(a.fill)});
+      else if(a.type==='highlight') page.drawRectangle({x:X(a.x),y:Y(a.y+a.h),width:a.w,height:a.h,color:col(a.color),opacity:0.4,blendMode:BlendMode.Multiply});
+      else if(a.type==='rect'){ const sw=a.width; const o={x:X(a.x+sw/2),y:Y(a.y+a.h-sw/2),width:Math.max(0,a.w-sw),height:Math.max(0,a.h-sw),opacity:op,borderOpacity:op};
+        if(a.fill) o.color=col(a.fill); if(sw>0){ o.borderColor=col(a.color); o.borderWidth=sw; } if(a.fill||sw>0) page.drawRectangle(o); }
+      else if(a.type==='ellipse'){ const sw=a.width; const o={x:X(a.x+a.w/2),y:Y(a.y+a.h/2),xScale:Math.max(0.1,a.w/2-sw/2),yScale:Math.max(0.1,a.h/2-sw/2),opacity:op,borderOpacity:op};
+        if(a.fill) o.color=col(a.fill); if(sw>0){ o.borderColor=col(a.color); o.borderWidth=sw; } page.drawEllipse(o); }
+      else if(isVec(a.type)) page.drawSvgPath(pathD(a),{x:box.x,y:box.y+p.h,borderColor:col(a.color),borderWidth:a.width,borderOpacity:op,borderLineCap:LineCapStyle.Round});
+      else if(a.type==='image') page.drawImage(await getImg(a.img),{x:X(a.x),y:Y(a.y+a.h),width:a.w,height:a.h,opacity:op});
+      else if(a.type==='text'){
+        const lines=a.text.split('\n'), lh=a.size*1.2, b0=a.y+baseOff(a);
+        const f=await getFont(a); let ok=!f.failed && !COMPLEX.test(a.text);
+        if(ok&&f.std){ try{ lines.forEach(l=>f.pdf.encodeText(l)); }catch(e){ ok=false; } }
+        if(ok&&f.fk){ for(const ch of a.text){ const cp=ch.codePointAt(0); if(cp>32 && !f.fk.hasGlyphForCodePoint(cp)){ ok=false; break; } } }
+        if(ok) lines.forEach((l,i)=>{ if(l) page.drawText(l,{x:X(a.x),y:Y(b0+i*lh),size:a.size,font:f.pdf,color:col(a.color)}); });
+        else { // right-to-left scripts or glyphs the font lacks: embed the text as a crisp image
+          await fontReady(a, a.text);
+          const S=4; mctx.font=cssFont(a,a.size*S); const w=Math.max(...lines.map(l=>mctx.measureText(l).width))/S+2, h=lines.length*lh;
+          const c=document.createElement('canvas'); c.width=Math.ceil(w*S); c.height=Math.ceil(h*S); const g=c.getContext('2d');
+          g.font=cssFont(a,a.size*S); g.fillStyle=a.color; const rtl=/[\u0590-\u08FF]/.test(a.text); g.direction=rtl?'rtl':'ltr'; g.textAlign=rtl?'right':'left'; lines.forEach((l,i)=>g.fillText(l,rtl?c.width:0,(baseOff(a)+i*lh)*S));
+          const im=await out.embedPng(c.toDataURL('image/png')); page.drawImage(im,{x:X(a.x),y:Y(a.y+h),width:w,height:h});
+        }
+      }
+    }
+  }
+  out.setProducer('Redline PDF Editor'); out.setModificationDate(new Date());
+  return await out.save();
+}
+let saving=false;
+async function download(){
+  if(saving) return; commitEdit(); saving=true; const b=$('#bSave'); const lbl=b.querySelector('.lbl'); const old=lbl.textContent; lbl.textContent='Preparing…';
+  try{
+    const bytes=await buildPdf(); const name=docName.replace(/\.pdf$/i,'')+'-edited.pdf';
+    const dl = window.claude?.use ? await window.claude.use('downloads') : null;
+    if(dl){ try{ await dl.save({filename:name, data:new Blob([bytes],{type:'application/pdf'})}); toast('Saved '+name); }
+      catch(err){ if(err?.code==='declined') toast('Download cancelled.'); else if(err?.code==='rate_limited') toast('A save prompt is already open.'); else toast('Saving is not available in this view.'); } }
+    else { const url=URL.createObjectURL(new Blob([bytes],{type:'application/pdf'})); const a=document.createElement('a'); a.href=url; a.download=name; document.body.append(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),4000); toast('Downloading '+name); }
+  }catch(err){ console.error(err); toast('Could not build the PDF: '+(err?.message||'unknown error'),4500); }
+  finally{ saving=false; lbl.textContent=old; }
+}
+
+// ---------- file open, drag & drop, keys ----------
+$('#bOpen').onclick=()=>$('#fOpen').click();
+$('#fOpen').addEventListener('change', async e=>{ const f=e.target.files[0]; e.target.value=''; if(f) openBytes(await readFile(f), f.name); });
+$('#bSave').onclick=download; $('#bUndo').onclick=undo; $('#bRedo').onclick=redo;
+let dropEl=null;
+viewer.addEventListener('dragover', e=>{ if(dragPid||!e.dataTransfer.types.includes('Files')) return; e.preventDefault(); if(!dropEl){ dropEl=document.createElement('div'); dropEl.className='drop'; dropEl.textContent='Drop a PDF to open it, or an image to place it'; viewer.append(dropEl);} });
+viewer.addEventListener('dragleave', e=>{ if(e.target===viewer||!viewer.contains(e.relatedTarget)){ dropEl?.remove(); dropEl=null; } });
+viewer.addEventListener('drop', async e=>{ if(dragPid) return; e.preventDefault(); dropEl?.remove(); dropEl=null; const f=e.dataTransfer.files[0]; if(!f) return;
+  if(/pdf/i.test(f.type)||/\.pdf$/i.test(f.name)) openBytes(await readFile(f), f.name);
+  else if(/^image\//.test(f.type)){ const pgi=e.target.closest?.('.pgi'); const im=await loadImage(f); const id=uid(); images[id]={url:im.url,kind:im.kind};
+    const p=pgi?pageById(pgi.dataset.pid):pages[curPage]; const pt=pgi?toLocal(p.id,e):[p.w/2,p.h/2]; const w=Math.min(p.w*0.5,im.w*0.75); pending={img:id,w,h:w*im.h/im.w}; placePending(p,pt); }
+});
+document.addEventListener('keydown', e=>{
+  if(e.target.closest?.('input,select,textarea,[contenteditable]')) return;
+  const mod=e.ctrlKey||e.metaKey;
+  if(mod&&e.key.toLowerCase()==='z'){ e.preventDefault(); e.shiftKey?redo():undo(); return; }
+  if(mod&&e.key.toLowerCase()==='y'){ e.preventDefault(); redo(); return; }
+  if(mod&&e.key.toLowerCase()==='s'){ e.preventDefault(); download(); return; }
+  if(mod&&e.key.toLowerCase()==='d'){ e.preventDefault(); dupSel(); return; }
+  if(mod&&(e.key==='='||e.key==='+')){ e.preventDefault(); setZoom(zoom*1.2); return; }
+  if(mod&&e.key==='-'){ e.preventDefault(); setZoom(zoom/1.2); return; }
+  if(mod) return;
+  if(e.key==='Delete'||e.key==='Backspace'){ if(selId){ e.preventDefault(); deleteSel(); } return; }
+  if(e.key==='Escape'){ if(document.querySelector('.scrim')) return; pending=null; select(null); setTool('select'); return; }
+  if(selId && e.key.startsWith('Arrow')){ e.preventDefault(); const [p,a]=findAnnot(selId); const s=e.shiftKey?10:1; snapshot();
+    moveAnnot(a, e.key==='ArrowLeft'?-s:e.key==='ArrowRight'?s:0, e.key==='ArrowUp'?-s:e.key==='ArrowDown'?s:0); renderOverlay(p); return; }
+  const m={v:'select',e:'edittext',t:'text',d:'draw',h:'highlight',w:'whiteout',r:'rect',o:'ellipse',l:'line',a:'arrow',i:'image',s:'sign'}[e.key.toLowerCase()];
+  if(m) setTool(m);
+});
+
+// ---------- sample document ----------
+async function makeSample(){
+  const {PDFDocument, StandardFonts, rgb} = PDFLib;
+  const d=await PDFDocument.create(); d.setTitle('Studio Rental Agreement'); d.setAuthor('Lumen Studios');
+  const H=await d.embedFont(StandardFonts.Helvetica), HB=await d.embedFont(StandardFonts.HelveticaBold), T=await d.embedFont(StandardFonts.TimesRoman), TB=await d.embedFont(StandardFonts.TimesRomanBold);
+  let MB=HB, PF=HB, LA=H, LB=HB; // brand fonts when the font files are reachable, built-in fonts otherwise
+  try{ d.registerFontkit(window.fontkit);
+    [MB,PF,LA,LB] = await Promise.all([['montserrat','b'],['playfair-display','b'],['lato','r'],['lato','b']].map(async ([f,v])=>d.embedFont(await loadFontBytes(f,v),{subset:true}))); }catch(e){ MB=HB; PF=HB; LA=H; LB=HB; }
+  const ink=rgb(.11,.13,.15), mute=rgb(.38,.42,.46), red=rgb(.77,.22,.17), rule=rgb(.8,.82,.85);
+  const W=612, Ht=792; const t=(pg,s,x,y,size,f,c=ink)=>pg.drawText(s,{x,y:Ht-y,size,font:f,color:c});
+  const p1=d.addPage([W,Ht]);
+  t(p1,'LUMEN STUDIOS',56,64,10,MB,red); t(p1,'14 Canal Road, Lahore · bookings@lumenstudios.pk',56,78,8.5,H,mute);
+  t(p1,'Agreement No. SR-2026-0418',400,64,9,H,mute); t(p1,'Date: October 2, 2026',400,78,9,H,mute);
+  p1.drawLine({start:{x:56,y:Ht-94},end:{x:556,y:Ht-94},thickness:.8,color:rule});
+  t(p1,'Studio Rental Agreement',56,132,26,PF);
+  const para=(pg,lines,y,size=11.5,lh=16)=>{ lines.forEach((l,i)=>t(pg,l,56,y+i*lh,size,T)); return y+lines.length*lh; };
+  let y=para(p1,['This agreement is made between Lumen Studios LLC (the “Studio”) and Amina Siddiqui','(the “Renter”) for the use of Stage B, its lighting grid and the adjoining green room.'],164);
+  const sec=(pg,s,y)=>{ t(pg,s,56,y,12,TB); return y+18; };
+  y=sec(p1,'1. Rental period',y+16);
+  y=para(p1,['From October 14, 2026 at 08:00 to October 16, 2026 at 20:00, a total of 60 hours.','Load-in begins one hour before the start time; overtime is billed at PKR 4,500 per hour.'],y);
+  y=sec(p1,'2. Fees',y+16);
+  const rows=[['Stage B day rate × 3 days','PKR 165,000'],['Lighting package (Arri SkyPanel × 4)','PKR 42,000'],['Security deposit (refundable)','PKR 50,000']];
+  rows.forEach(([a,b])=>{ t(p1,a,72,y,11,LA); t(p1,b,556-LA.widthOfTextAtSize(b,11),y,11,LA); p1.drawLine({start:{x:72,y:Ht-y-6},end:{x:556,y:Ht-y-6},thickness:.5,color:rule}); y+=22; });
+  t(p1,'Total due',72,y+2,11.5,LB); t(p1,'PKR 257,000',556-LB.widthOfTextAtSize('PKR 257,000',11.5),y+2,11.5,LB); y+=30;
+  y=sec(p1,'3. Conditions',y+6);
+  y=para(p1,['a) The Renter returns the stage swept and the cyc wall unpainted unless agreed in writing.','b) No open flame, haze machines need prior approval from the Studio manager.','c) The deposit is refunded within 7 working days after the equipment check.','d) Cancellation within 72 hours of the start time forfeits 50% of the stage fee.'],y);
+  const sy=Ht-120;
+  [[56,'Renter signature','Amina Siddiqui'],[330,'Studio representative','Bilal Ahmed, Studio Manager']].forEach(([x,l,n])=>{
+    p1.drawLine({start:{x,y:Ht-sy},end:{x:x+226,y:Ht-sy},thickness:.8,color:ink}); t(p1,l,x,sy+14,9,HB,mute); t(p1,n,x,sy+27,9,H,mute); t(p1,'Date: ____________',x,sy+42,9,H,mute); });
+  t(p1,'Page 1 of 2',W/2-22,Ht-30,8,H,mute);
+  const p2=d.addPage([W,Ht]);
+  t(p2,'LUMEN STUDIOS',56,64,10,MB,red); t(p2,'Agreement No. SR-2026-0418',400,64,9,H,mute);
+  p2.drawLine({start:{x:56,y:Ht-80},end:{x:556,y:Ht-80},thickness:.8,color:rule});
+  t(p2,'Schedule A — Equipment List',56,118,22,PF);
+  let yy=152; [['Item',56],['Qty',360],['Condition at check-out',410]].forEach(([s,x])=>t(p2,s,x,yy,9.5,HB,mute)); yy+=8;
+  p2.drawLine({start:{x:56,y:Ht-yy},end:{x:556,y:Ht-yy},thickness:.8,color:ink}); yy+=18;
+  [['Arri SkyPanel S60-C','4','Good'],['Aputure 600d with Light Dome','2','Good'],['C-stand, 40"','10','2 with worn knuckles'],['Sandbag, 15 lb','16','Good'],['Matthews 12×12 frame + silk','1','Small tear, taped'],['Apple boxes (full set)','3','Good'],['Extension cable, 50 ft','8','Good']].forEach(r=>{
+    t(p2,r[0],56,yy,11,T); t(p2,r[1],360,yy,11,T); t(p2,r[2],410,yy,11,T); p2.drawLine({start:{x:56,y:Ht-yy-7},end:{x:556,y:Ht-yy-7},thickness:.5,color:rule}); yy+=24; });
+  t(p2,'Checked out by: ________________________     Checked in by: ________________________',56,yy+30,10,H,mute);
+  t(p2,'Page 2 of 2',W/2-22,Ht-30,8,H,mute);
+  return await d.save();
+}
+async function loadSample(){ openBytes(await makeSample(), 'studio-rental-agreement.pdf', true); }
+
+// ---------- boot ----------
+function boot(){
+  $('#bUndo').innerHTML=ic(I.undo); $('#bRedo').innerHTML=ic(I.redo); $('#iOpen').innerHTML=ic(I.open); $('#iSave').innerHTML=ic(I.save);
+  $('#zIn').innerHTML=ic(I.plus); $('#zOut').innerHTML=ic(I.minus); $('#zFit').innerHTML=ic(I.fit); $('#tgThumbs').innerHTML=ic(I.pages);
+  $('#tgThumbs').onclick=()=>toggleThumbs();
+  if(innerWidth<=760) $('#thumbs').hidden=true;
+  renderRail(); renderProps(); updUndo();
+  if(!window.pdfjsLib||!window.PDFLib){ $('#loading').textContent='The PDF engine could not load. Check your connection and reload.'; return; }
+  pdfjsLib.GlobalWorkerOptions.workerSrc='lib/pdf.worker.min.js';
+  loadSample();
+  let rt; addEventListener('resize',()=>{ clearTimeout(rt); rt=setTimeout(()=>{ $('#thumbs').hidden = innerWidth<=760; },150); });
+}
+boot();
+})();
+</script>
+
+</body>
+</html>
