@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Redline PDF Editor</title>
-<meta name="description" content="Free online PDF editor. Edit existing text with automatic font matching, add text, draw, highlight, sign and rearrange pages. Files stay in your browser.">
+<meta name="description" content="Free online PDF editor. Edit existing text with automatic font matching, 1,900+ Google Fonts, add text, draw, highlight, sign and rearrange pages. Files stay in your browser.">
 <meta name="theme-color" content="#c4382c">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect x=%226%22 y=%223%22 width=%2220%22 height=%2226%22 rx=%222%22 fill=%22white%22 stroke=%22%231b2127%22 stroke-width=%222%22/%3E%3Cpath d=%22M9 17l14-3%22 stroke=%22%23c4382c%22 stroke-width=%223%22/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@400;600;700&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400;0,700;1,400;1,700&family=Carlito:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Lato:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,400;0,700;1,400;1,700&family=Inter:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+3:ital,wght@0,400;0,700;1,400;1,700&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Raleway:ital,wght@0,400;0,700;1,400;1,700&family=Nunito:ital,wght@0,400;0,700;1,400;1,700&family=Work+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Oswald:wght@400;700&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tinos:ital,wght@0,400;0,700;1,400;1,700&family=Caladea:ital,wght@0,400;0,700;1,400;1,700&family=Gelasio:ital,wght@0,400;0,700;1,400;1,700&family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=EB+Garamond:ital,wght@0,400;0,700;1,400;1,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Roboto+Slab:wght@400;700&family=Cousine:ital,wght@0,400;0,700;1,400;1,700&family=Roboto+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Source+Code+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Dancing+Script:wght@400;700&family=Pacifico&family=Great+Vibes&family=Noto+Nastaliq+Urdu:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap">
 <style>
 /* Layout: proofing desk — tool rail | page strip | scrolling paper stack, red proofmark accent */
 :root{
@@ -62,6 +62,7 @@ input[type=color]{width:24px;height:24px;border:0;padding:0;background:none;curs
 .tog.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
 .props input[type=range]{width:80px;accent-color:var(--accent)}
 .hint{color:var(--ink-2);font-size:12px;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.linkbtn{border:0;background:none;color:var(--accent);font-weight:600;cursor:pointer;padding:0;font-size:12px}
 .hint .det b{color:var(--ink);font-weight:500}
 .tag{font-size:11px;padding:2px 7px;border-radius:10px;background:var(--hover);color:var(--ink)}
 .tag.ok{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)}
@@ -130,6 +131,27 @@ input[type=color]{width:24px;height:24px;border:0;padding:0;background:none;curs
 .mrow .grow{flex:1;display:flex;gap:6px;align-items:center}
 .saved-sig{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .saved-sig img{height:40px;background:#fff;border:1px solid var(--line);border-radius:4px;padding:2px 6px;cursor:pointer}
+.fpbtn{height:28px;display:inline-flex;align-items:center;gap:4px;max-width:200px;padding:0 6px 0 9px;border:1px solid var(--line);border-radius:5px;background:var(--panel-2);cursor:pointer;font-size:13.5px}
+.fpbtn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fpbtn svg{width:14px;height:14px;flex:none;font-family:var(--f-ui)}
+.fp{position:fixed;z-index:45;width:380px;max-height:min(560px,calc(100vh - 140px));display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);overflow:hidden}
+.fp-head{display:flex;gap:6px;padding:10px 10px 6px}
+.fp-head input{flex:1;min-width:0;height:34px;border:1px solid var(--line);border-radius:7px;padding:0 10px;background:var(--panel-2)}
+.fp-chips{display:flex;gap:5px;padding:2px 10px 6px;overflow-x:auto;scrollbar-width:none;flex:none}
+.fp-chip{flex:none;height:26px;padding:0 10px;border-radius:13px;border:1px solid var(--line);background:var(--panel-2);cursor:pointer;font-size:12px;white-space:nowrap}
+.fp-chip.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+.fp-sub{padding:0 12px 4px;font-size:11px;color:var(--ink-2);font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.fp-list{overflow-y:auto;flex:1;min-height:120px;border-top:1px solid var(--line)}
+.fp-row{display:flex;flex-direction:column;align-items:flex-start;gap:1px;width:100%;padding:8px 14px;border:0;background:none;cursor:pointer;text-align:left;border-bottom:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
+.fp-row:hover,.fp-row:focus-visible{background:var(--hover)}
+.fp-row.on{background:var(--accent-soft)}
+.fp-name{font-size:19px;line-height:1.3;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.fp-meta{font-size:11px;color:var(--ink-2);font-family:var(--f-ui)}
+.fp-more{width:100%;padding:12px;border:0;background:none;color:var(--accent);font-weight:600;cursor:pointer}
+.fp-empty{padding:24px 16px;color:var(--ink-2);text-align:center}
+.fp-foot{display:flex;gap:6px;padding:8px 10px;border-top:1px solid var(--line);flex-wrap:wrap}
+.fp-foot .btn{flex:1;justify-content:center;height:32px;font-size:12px;padding:0 8px}
+@media (max-width:760px){ .fp{left:0!important;right:0;bottom:0;top:auto!important;width:auto;max-height:78vh;border-radius:14px 14px 0 0;padding-bottom:env(safe-area-inset-bottom,0px)} }
 .mobile-only{display:none}
 @media (max-width:760px){
   .app{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto minmax(0,1fr)}
@@ -209,62 +231,161 @@ const TOOLS = [
   ['rect','Rectangle','R'],['ellipse','Ellipse','O'],['line','Line','L'],['arrow','Arrow','A'],['sep'],
   ['image','Insert image','I'],['sign','Fill & sign','S']
 ];
-// Font library. v = available files: r regular, b bold, i italic, X bold italic. note = which common font it stands in for.
-const SANS='Arial, "Liberation Sans", sans-serif', SERIF='"Times New Roman", "Liberation Serif", serif', MONO='"Courier New", monospace', SCRIPT='cursive';
-const FONT_LIB = [
-  ['Standard PDF', [['Helvetica',null,'rbiX',SANS,'built in'],['Times',null,'rbiX',SERIF,'built in'],['Courier',null,'rbiX',MONO,'built in']]],
-  ['Sans serif', [['Arimo','arimo','rbiX',SANS,'Arial match'],['Carlito','carlito','rbiX',SANS,'Calibri match'],['Roboto','roboto','rbiX',SANS],['Open Sans','open-sans','rbiX',SANS],['Lato','lato','rbiX',SANS],
-    ['Montserrat','montserrat','rbiX',SANS],['Poppins','poppins','rbiX',SANS],['Inter','inter','rbiX',SANS],['Noto Sans','noto-sans','rbiX',SANS],['Source Sans 3','source-sans-3','rbiX',SANS],
-    ['PT Sans','pt-sans','rbiX',SANS],['Raleway','raleway','rbiX',SANS],['Nunito','nunito','rbiX',SANS],['Work Sans','work-sans','rbiX',SANS],['Oswald','oswald','rb',SANS]]],
-  ['Serif', [['Tinos','tinos','rbiX',SERIF,'Times New Roman match'],['Caladea','caladea','rbiX',SERIF,'Cambria match'],['Gelasio','gelasio','rbiX',SERIF,'Georgia match'],['Merriweather','merriweather','rbiX',SERIF],
-    ['Lora','lora','rbiX',SERIF],['Playfair Display','playfair-display','rbiX',SERIF],['EB Garamond','eb-garamond','rbiX',SERIF],['Libre Baskerville','libre-baskerville','rbiX',SERIF],['PT Serif','pt-serif','rbiX',SERIF],['Roboto Slab','roboto-slab','rb',SERIF]]],
-  ['Monospace', [['Cousine','cousine','rbiX',MONO,'Courier New match'],['Roboto Mono','roboto-mono','rbiX',MONO],['Source Code Pro','source-code-pro','rbiX',MONO]]],
-  ['Handwriting', [['Dancing Script','dancing-script','rb',SCRIPT],['Caveat','caveat','rb',SCRIPT],['Pacifico','pacifico','r',SCRIPT],['Great Vibes','great-vibes','r',SCRIPT]]],
-  ['Urdu & Arabic', [['Noto Nastaliq Urdu','noto-nastaliq-urdu','rb',SERIF],['Noto Naskh Arabic','noto-naskh-arabic','rb',SERIF]]]
-];
+// ---------- font system ----------
+// Sources: 'std' (PDF built-in), 'lib' (bundled TTF in fonts/), 'google' (catalog.json, downloaded on demand),
+// 'system' (installed on this computer, Local Font Access API), 'upload' (font file the user added).
+const CAT_NAME = {'sans-serif':'Sans serif', serif:'Serif', display:'Display', handwriting:'Handwriting', monospace:'Monospace'};
+const CAT_FB = {'sans-serif':'Arial, "Liberation Sans", sans-serif', serif:'"Times New Roman", "Liberation Serif", serif', display:'Arial, sans-serif', handwriting:'cursive', monospace:'"Courier New", monospace'};
 const STD = {Helvetica:['Helvetica','HelveticaBold','HelveticaOblique','HelveticaBoldOblique'], Times:['TimesRoman','TimesRomanBold','TimesRomanItalic','TimesRomanBoldItalic'], Courier:['Courier','CourierBold','CourierOblique','CourierBoldOblique']};
-const FONTS = {};
-FONT_LIB.forEach(([grp,list])=>list.forEach(([name,slug,v,fb,note])=>{
-  FONTS[name] = {slug, v, grp, note, std:slug?null:STD[name],
-    css: slug ? `"${name}", ${fb}` : name==='Helvetica' ? 'Helvetica, Arial, "Liberation Sans", sans-serif' : name==='Times' ? '"Times New Roman", Times, "Liberation Serif", serif' : '"Courier New", Courier, "Liberation Mono", monospace'};
-}));
-function variantKey(F,bold,italic){
-  if(bold&&italic&&F.v.includes('X')) return 'bi';
-  if(bold&&F.v.includes('b')) return 'b';
-  if(italic&&F.v.includes('i')) return 'i';
-  return 'r';
-}
-// Map a PDF font name (e.g. "ABCDEF+Calibri-BoldItalic") to the closest font in the library.
-const COMPAT = [
-  [/^helvetica/, 'Helvetica', true, true], [/^times([-,]|roman$|$)/, 'Times', true, true], [/^courier([-,]|$)/, 'Courier', true, true],
-  [/couriernew|liberationmono|nimbusmono|cousine/, 'Cousine'], [/consolas|menlo|monaco|dejavusansmono|lucidaconsole|andalemono|ubuntumono/, 'Roboto Mono'],
-  [/arial|liberationsans|nimbussans|arimo|helv/, 'Arimo'], [/timesnewroman|liberationserif|nimbusrom|tinos|^times/, 'Tinos'],
-  [/calibri|carlito/, 'Carlito'], [/cambria|caladea/, 'Caladea'], [/georgia|gelasio/, 'Gelasio'],
-  [/garamond/, 'EB Garamond'], [/baskerville/, 'Libre Baskerville'], [/palatino|bookantiqua|pala|minion|charter|bookman|sourceserif|century(schoolbook)?$/, 'PT Serif'],
-  [/myriad|sourcesans/, 'Source Sans 3'], [/segoe|verdana|tahoma|trebuchet|frutiger|dejavusans|notosans|lucidasans|corbel|candara/, 'Noto Sans'],
-  [/centurygothic|futura|avenir|gotham|proxima|gilroy/, 'Montserrat'], [/rockwell|courierprime|slab|museo/, 'Roboto Slab'],
-  [/nastaliq|nastaleeq|noori|jameel|urdu/, 'Noto Nastaliq Urdu'], [/naskh|arabic|traditionalarabic|scheherazade|amiri/, 'Noto Naskh Arabic'],
-  [/brush|script|hand|comic/, 'Dancing Script']
+const STD_CSS = {Helvetica:'Helvetica, Arial, "Liberation Sans", sans-serif', Times:'"Times New Roman", Times, "Liberation Serif", serif', Courier:'"Courier New", Courier, "Liberation Mono", monospace'};
+const BUNDLED = { // family: [file slug, variants (r b i X=bold italic), category]
+  'Arimo':['arimo','rbiX','sans-serif'],'Carlito':['carlito','rbiX','sans-serif'],'Roboto':['roboto','rbiX','sans-serif'],'Open Sans':['open-sans','rbiX','sans-serif'],
+  'Lato':['lato','rbiX','sans-serif'],'Montserrat':['montserrat','rbiX','sans-serif'],'Poppins':['poppins','rbiX','sans-serif'],'Inter':['inter','rbiX','sans-serif'],
+  'Noto Sans':['noto-sans','rbiX','sans-serif'],'Source Sans 3':['source-sans-3','rbiX','sans-serif'],'PT Sans':['pt-sans','rbiX','sans-serif'],'Raleway':['raleway','rbiX','sans-serif'],
+  'Nunito':['nunito','rbiX','sans-serif'],'Work Sans':['work-sans','rbiX','sans-serif'],'Oswald':['oswald','rb','sans-serif'],'Tinos':['tinos','rbiX','serif'],
+  'Caladea':['caladea','rbiX','serif'],'Gelasio':['gelasio','rbiX','serif'],'Merriweather':['merriweather','rbiX','serif'],'Lora':['lora','rbiX','serif'],
+  'Playfair Display':['playfair-display','rbiX','serif'],'EB Garamond':['eb-garamond','rbiX','serif'],'Libre Baskerville':['libre-baskerville','rbiX','serif'],
+  'PT Serif':['pt-serif','rbiX','serif'],'Roboto Slab':['roboto-slab','rb','serif'],'Cousine':['cousine','rbiX','monospace'],'Roboto Mono':['roboto-mono','rbiX','monospace'],
+  'Source Code Pro':['source-code-pro','rbiX','monospace'],'Dancing Script':['dancing-script','rb','handwriting'],'Caveat':['caveat','rb','handwriting'],
+  'Pacifico':['pacifico','r','handwriting'],'Great Vibes':['great-vibes','r','handwriting'],'Noto Nastaliq Urdu':['noto-nastaliq-urdu','rb','serif'],'Noto Naskh Arabic':['noto-naskh-arabic','rb','serif']
+};
+// Microsoft Office fonts and their free stand-ins. third value 1 = same character widths (metric compatible).
+const WORD_ALIKES = [
+  ['Calibri','Carlito',1],['Cambria','Caladea',1],['Arial','Arimo',1],['Times New Roman','Tinos',1],['Courier New','Cousine',1],['Georgia','Gelasio',1],
+  ['Aptos','Inter',0],['Segoe UI','Open Sans',0],['Verdana','PT Sans',0],['Tahoma','Noto Sans',0],['Trebuchet MS','Fira Sans',0],['Century Gothic','Didact Gothic',0],
+  ['Franklin Gothic','Libre Franklin',0],['Gill Sans MT','Lato',0],['Bahnschrift','Barlow',0],['Corbel','Source Sans 3',0],['Candara','Signika',0],
+  ['Garamond','EB Garamond',0],['Book Antiqua','Crimson Pro',0],['Palatino Linotype','Crimson Pro',0],['Baskerville Old Face','Libre Baskerville',0],
+  ['Bodoni MT','Bodoni Moda',0],['Constantia','Merriweather',0],['Rockwell','Arvo',0],['Impact','Anton',0],['Consolas','Inconsolata',0],
+  ['Lucida Console','Roboto Mono',0],['Comic Sans MS','Comic Neue',0],['Brush Script MT','Dancing Script',0],['Segoe Script','Caveat',0],['Futura','Jost',0]
 ];
-const FAMILY_KEYS = Object.keys(FONTS).filter(n=>FONTS[n].slug).map(n=>[n, n.toLowerCase().replace(/[^a-z0-9]/g,'')]).sort((a,b)=>b[1].length-a[1].length);
+const POPULAR = ['Roboto','Open Sans','Lato','Montserrat','Poppins','Inter','Noto Sans','Raleway','Nunito','Oswald','Playfair Display','Merriweather','Lora',
+  'Source Sans 3','PT Sans','PT Serif','Work Sans','Rubik','Fira Sans','Barlow','Mulish','DM Sans','Manrope','Quicksand','Karla','Josefin Sans','Ubuntu',
+  'Libre Baskerville','EB Garamond','Crimson Text','Noto Serif','Roboto Slab','Bebas Neue','Anton','Archivo','Roboto Mono','Source Code Pro','Dancing Script',
+  'Pacifico','Caveat','Great Vibes','Lobster','Noto Nastaliq Urdu','Gulzar'];
+const FAM = {};
+let SUBSETS=[], RANGES={}, catalogSize=0;
+function addFam(name, info){ const F = FAM[name] || (FAM[name]={name, w:[], it:false});
+  for(const k in info){ if(k==='w') F.w=[...new Set([...F.w, ...info.w])].sort((a,b)=>a-b); else if(k==='it') F.it=F.it||info.it; else if(F[k]===undefined||k==='faces') F[k]=info[k]; }
+  return F; }
+Object.keys(STD).forEach(n=>addFam(n,{src:'std', std:STD[n], w:[400,700], it:true, cat:n==='Times'?'serif':n==='Courier'?'monospace':'sans-serif'}));
+for(const [n,[slug,v,cat]] of Object.entries(BUNDLED)) addFam(n,{src:'lib', slug, v, cat, w:v.includes('b')?[400,700]:[400], it:v.includes('i')});
+const ALIKE = {}; WORD_ALIKES.forEach(([word,g,m])=>{ (ALIKE[g]=ALIKE[g]||[]).push([word,m]); });
+function alikeNote(name){ const l=ALIKE[name]; return l ? `${l.map(x=>x[0]).join(' / ')} ${l[0][1]?'match':'look-alike'}` : ''; }
+async function loadCatalog(){
+  try{ const r=await fetch('catalog.json'); if(!r.ok) return; const c=await r.json(); SUBSETS=c.subsets; RANGES=c.ranges;
+    for(const [name,ci,mask,it,subs] of c.fonts){ const w=[]; for(let i=0;i<9;i++) if(mask&(1<<i)) w.push((i+1)*100);
+      const F=addFam(name,{cat:c.cats[ci], w, it:!!it}); F.g=true; F.sub=subs.map(i=>SUBSETS[i]); if(!F.src) F.src='google'; }
+    catalogSize=c.fonts.length; rebuildKeys();
+  }catch(e){ console.warn('Font catalog unavailable', e); }
+}
+const WEIGHT_NAMES = {100:'Thin',200:'ExtraLight',300:'Light',400:'Regular',500:'Medium',600:'SemiBold',700:'Bold',800:'ExtraBold',900:'Black'};
+function wt(a){ return a.weight ?? (a.bold?700:400); }
+function nearestW(name, w){ const F=FAM[name]; const ws=F&&F.w.length?F.w:[400,700]; return ws.reduce((b,x)=>Math.abs(x-w)<Math.abs(b-w)||(Math.abs(x-w)===Math.abs(b-w)&&x>b)?x:b, ws[0]); }
+function famCss(name){ const F=FAM[name]; if(F&&F.std) return STD_CSS[name]; return `"${name}", ${CAT_FB[(F&&F.cat)||'sans-serif']}`; }
+function styleWeight(s){ s=(s||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+  if(/thin|hairline/.test(s)) return 100; if(/extralight|ultralight/.test(s)) return 200; if(/semilight|light/.test(s)) return 300;
+  if(/medium/.test(s)) return 500; if(/semibold|demibold|demi/.test(s)) return 600; if(/extrabold|ultrabold/.test(s)) return 800;
+  if(/black|heavy/.test(s)) return 900; if(/bold/.test(s)) return 700; const m=s.match(/w([1-9])$/); if(m) return +m[1]*100; return 400; }
+const fkey = s => (s||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+let KEYS = new Map(), PREFIX_KEYS=[];
+function rebuildKeys(){ KEYS=new Map(); for(const n in FAM) KEYS.set(fkey(n), n); PREFIX_KEYS=[...KEYS.keys()].filter(k=>k.length>=4).sort((a,b)=>b.length-a.length); }
+rebuildKeys();
+const COMPAT = [
+  [/couriernew|liberationmono|nimbusmono/, 'Cousine'], [/consolas/, 'Inconsolata'], [/menlo|monaco|dejavusansmono|lucidaconsole|andalemono/, 'Roboto Mono'],
+  [/arial|liberationsans|nimbussans|helv/, 'Arimo'], [/timesnewroman|liberationserif|nimbusrom|^times/, 'Tinos'],
+  [/calibri/, 'Carlito'], [/cambria/, 'Caladea'], [/georgia/, 'Gelasio'], [/aptos/, 'Inter'],
+  [/garamond/, 'EB Garamond'], [/baskerville/, 'Libre Baskerville'], [/bodoni/, 'Bodoni Moda'], [/palatino|bookantiqua|pala|minion|charter|bookman/, 'Crimson Pro'],
+  [/myriad|sourcesans/, 'Source Sans 3'], [/sourceserif/, 'Source Serif 4'], [/segoe/, 'Open Sans'], [/verdana/, 'PT Sans'], [/tahoma|frutiger|dejavusans|lucidasans/, 'Noto Sans'], [/trebuchet/, 'Fira Sans'],
+  [/centurygothic/, 'Didact Gothic'], [/futura/, 'Jost'], [/avenir|gotham|proxima|gilroy/, 'Montserrat'], [/franklingothic/, 'Libre Franklin'],
+  [/gillsans/, 'Lato'], [/bahnschrift|din/, 'Barlow'], [/rockwell/, 'Arvo'], [/impact/, 'Anton'], [/comicsans/, 'Comic Neue'],
+  [/nastaliq|nastaleeq|noori|jameel|urdu/, 'Noto Nastaliq Urdu'], [/naskh|arabic|traditionalarabic|scheherazade/, 'Noto Naskh Arabic'],
+  [/brush|script|hand/, 'Dancing Script']
+];
+function splitFontName(raw){
+  let n=(raw||'').replace(/^[A-Z]{6}\+/,'').replace(/[-_]\d{3,}$/,'').trim();
+  let fam=n, style='';
+  const m=n.match(/^(.*?)[-,](.*)$/); if(m){ fam=m[1]; style=m[2]; }
+  else { const t=n.match(/^(.*?)((?:Thin|Hairline|ExtraLight|UltraLight|SemiLight|Light|Book|Regular|Normal|Roman|Medium|SemiBold|DemiBold|Demi|ExtraBold|UltraBold|Bold|Heavy|Black|Italic|Oblique|It)+)$/); if(t&&t[1]){ fam=t[1]; style=t[2]; } }
+  fam=fam.replace(/(PSMT|PS|MT|Std|Pro|LT|Com)$/,'').trim();
+  const pretty=fam.replace(/[_]+/g,' ').replace(/([a-z])([A-Z])/g,'$1 $2').replace(/([A-Z]+)([A-Z][a-z])/g,'$1 $2').trim();
+  return {name:n, fam, pretty, style};
+}
 function matchFont(raw, flags={}, sample=''){
-  const name = (raw||'').replace(/^[A-Z]{6}\+/,'').replace(/[-_]\d{3,}$/,'');
-  const key = name.toLowerCase().replace(/[^a-z0-9]/g,''), low = name.toLowerCase();
-  const bold = /bold|black|heavy|semibold|demi|extrabold|ultra|w[6-9]$/i.test(name) || !!flags.bold || !!flags.black;
-  const italic = /italic|oblique|ital|-it$|slanted/i.test(name) || !!flags.italic;
-  let font=null, exact=false;
-  for(const [fam,k] of FAMILY_KEYS){ if(key.startsWith(k) || key.includes(k)){ font=fam; exact=true; break; } }
-  if(!font) for(const [re,fam,ex,raw] of COMPAT){ if(re.test(raw?low:key)){ font=fam; exact=!!ex; break; } }
-  if(/[؀-ۿݐ-ݿﭐ-﷿ﹰ-﻿]/.test(sample) && !(font&&FONTS[font].grp==='Urdu & Arabic')) font = /[ٹڈڑںھہے]/.test(sample) ? 'Noto Nastaliq Urdu' : 'Noto Naskh Arabic';
+  const {name, fam, pretty, style} = splitFontName(raw); const low=name.toLowerCase();
+  let weight = styleWeight(style); if(weight===400 && (flags.black)) weight=900; else if(weight===400 && flags.bold) weight=700;
+  const italic = /italic|oblique|ital|^it$|slant/i.test(style) || /italic|oblique/i.test(name) || !!flags.italic;
+  let font=null, exact=false, wordOriginal=null; const key=fkey(fam);
+  if(/^helvetica/.test(low)) { font='Helvetica'; exact=true; }
+  else if(/^times([-,]|roman$|$)/.test(low)) { font='Times'; exact=true; }
+  else if(/^courier([-,]|$)/.test(low)) { font='Courier'; exact=true; }
+  if(!font && key && KEYS.has(key)) { font=KEYS.get(key); exact=true; }
+  if(!font && sysFonts) for(const fam of sysFonts.keys()) if(fkey(fam)===key || fkey(fam)===fkey(pretty)) { font=fam; exact=true; break; }
+  if(!font) for(const [re,f] of COMPAT){ if(re.test(key||fkey(name)) && FAM[f]){ font=f; if(/^(calibri|cambria|arial|timesnewroman|couriernew|georgia|segoeui|segoe|verdana|tahoma|consolas|aptos|centurygothic|garamond|bookantiqua|palatino|comicsans|impact|trebuchet|franklingothic|gillsans|bahnschrift|rockwell|bodoni|constantia|corbel|candara)/.test(key)) wordOriginal=pretty; break; } }
+  if(!font && key) for(const k of PREFIX_KEYS){ if(key.startsWith(k)){ font=KEYS.get(k); break; } }
+  if(!font && key.length>=5){ const longer=PREFIX_KEYS.filter(k=>k.startsWith(key)).sort((a,b)=>a.length-b.length)[0]; if(longer){ font=KEYS.get(longer); exact=true; } }
+  if(font && !exact && /^(calibri|cambria|arial|timesnewroman|couriernew|georgia|segoeui|verdana|tahoma|consolas|aptos|centurygothic|garamond|bookantiqua|palatinolinotype|comicsansms|impact|trebuchetms)/.test(key)) wordOriginal=pretty;
+  if(/[؀-ۿݐ-ݿﭐ-﷿ﹰ-﻿]/.test(sample) && !(font&&FAM[font]?.sub?.includes('arabic'))) { font = /[ٹڈڑںھہے]/.test(sample) ? 'Noto Nastaliq Urdu' : 'Noto Naskh Arabic'; exact=false; }
   if(!font) font = flags.isMonospace||flags.fallbackName==='monospace' ? 'Cousine' : (flags.isSerifFont||flags.fallbackName==='serif') ? 'Tinos' : 'Arimo';
-  const pretty = name.replace(/[-_,]+/g,' ').replace(/([a-z])([A-Z])/g,'$1 $2').replace(/\s*MT$|\s*PSMT$|\s*PS$/,'').trim() || 'Unnamed font';
-  return {font, bold, italic, exact, src: pretty};
+  const src = (pretty + (style ? ' ' + style.replace(/(PSMT|MT|PS)$/,'').replace(/([a-z])([A-Z])/g,'$1 $2') : '')).trim() || 'Unnamed font';
+  return {font, weight: nearestW(font, weight), bold: weight>=600, italic: italic && (FAM[font]?.it ?? true), exact, src, word: wordOriginal};
 }
 const fontBytes = {};
 async function loadFontBytes(slug, vk){
   const k=slug+'-'+vk; if(fontBytes[k]) return fontBytes[k];
   const r = await fetch(`fonts/${k}.ttf`); if(!r.ok) throw new Error('Font file missing: '+k);
   return fontBytes[k] = new Uint8Array(await r.arrayBuffer());
+}
+function libVariant(F, w, it){ // bundled file for this weight/style, or null
+  if(!F.slug) return null; const b = w>=600;
+  if(w!==400 && w!==700 && F.g) return null;
+  if(b&&it&&F.v.includes('X')) return 'bi'; if(b&&!it&&F.v.includes('b')) return 'b'; if(!b&&it&&F.v.includes('i')) return 'i'; if(!b&&!it) return 'r';
+  return F.g ? null : (b&&F.v.includes('b') ? 'b' : 'r');
+}
+const gId = name => name.toLowerCase().replace(/ /g,'-');
+async function fetchBytes(url){ const r=await fetch(url); if(!r.ok) throw new Error(r.status+' '+url); return new Uint8Array(await r.arrayBuffer()); }
+async function googleFile(name, subset, w, style){ // static TTF (WOFF as backup) for one character subset
+  const base=`https://cdn.jsdelivr.net/fontsource/fonts/${gId(name)}@latest/${subset}-${w}-${style}`;
+  try{ return await fetchBytes(base+'.ttf'); }catch(e){ return await fetchBytes(base+'.woff'); }
+}
+function inRanges(cp, rs){ for(const [a,b] of rs) if(cp>=a&&cp<=b) return true; return false; }
+function subsetsFor(F, text){
+  const subs=F.sub&&F.sub.length?F.sub:['latin']; const order=[...subs].sort((a,b)=>(a==='latin'?-2:a==='latin-ext'?-1:0)-(b==='latin'?-2:b==='latin-ext'?-1:0));
+  const need=new Set(['latin'].filter(s=>subs.includes(s)));
+  for(const ch of text){ const cp=ch.codePointAt(0); if(cp<=32) continue;
+    if([...need].some(s=>inRanges(cp,RANGES[s]||[]))) continue;
+    const s=order.find(s=>inRanges(cp,RANGES[s]||[])); if(s) need.add(s); }
+  if(!need.size) need.add(order[0]); return [...need];
+}
+// ----- fonts on this computer -----
+let sysFonts=null;
+async function loadSystemFonts(){
+  if(sysFonts) return sysFonts; if(!('queryLocalFonts' in window)) throw new Error('unsupported');
+  const list=await window.queryLocalFonts(); const map=new Map();
+  for(const f of list){ if(!map.has(f.family)) map.set(f.family,[]); map.get(f.family).push(f); }
+  for(const [fam,faces] of map){ const F=FAM[fam];
+    const info={w:[...new Set(faces.map(f=>styleWeight(f.style)))], it:faces.some(f=>/italic|oblique/i.test(f.style)), sys:true};
+    if(!F){ addFam(fam,{...info, src:'system', cat:/serif|roman|times|georgia|cambria|garamond|book/i.test(fam)&&!/sans/i.test(fam)?'serif':/mono|consol|courier/i.test(fam)?'monospace':/script|hand|brush/i.test(fam)?'handwriting':'sans-serif'}); }
+    else if(F.src==='system') { F.w=info.w.sort((a,b)=>a-b); F.it=info.it; F.sys=true; }
+  }
+  sysFonts=map; rebuildKeys(); return map;
+}
+async function systemBytes(name, w, it){
+  const map=await loadSystemFonts(); const faces=map.get(name); if(!faces) throw new Error('not installed');
+  const best=faces.map(f=>[Math.abs(styleWeight(f.style)-w)+(/italic|oblique/i.test(f.style)!==!!it?1000:0), f]).sort((a,b)=>a[0]-b[0])[0][1];
+  const bytes=new Uint8Array(await (await best.blob()).arrayBuffer());
+  if(bytes[0]===0x74&&bytes[1]===0x74&&bytes[2]===0x63&&bytes[3]===0x66) throw new Error('font collection'); // .ttc cannot be embedded directly
+  return bytes;
+}
+// ----- uploaded font files -----
+async function addUploadedFont(file){
+  const bytes=new Uint8Array(await file.arrayBuffer());
+  if(bytes[0]===0x77&&bytes[1]===0x4F&&bytes[2]===0x46&&bytes[3]===0x32) throw new Error('WOFF2 files are not supported. Use TTF, OTF or WOFF.');
+  const fk=window.fontkit.create(bytes); const fam=(fk.familyName||file.name.replace(/\.[^.]+$/,'')).trim();
+  const w=fk['OS/2']?.usWeightClass ? Math.min(900,Math.max(100,Math.round(fk['OS/2'].usWeightClass/100)*100)) : styleWeight(fk.subfamilyName);
+  const it=(fk.italicAngle||0)!==0 || /italic|oblique/i.test(fk.subfamilyName||'');
+  const ff=new FontFace(fam, bytes.slice().buffer, {weight:String(w), style:it?'italic':'normal'}); await ff.load(); document.fonts.add(ff);
+  const F=addFam(fam,{w:[w], it, cat:'sans-serif'}); if(!F.src||F.src==='google'||F.src==='lib') F.upSrc=F.src; F.src='upload';
+  F.faces=Object.assign(F.faces||{}, {[w+(it?'i':'')]:bytes}); rebuildKeys(); return fam;
 }
 const COMPLEX = /[֐-ࣿऀ-෿฀-࿿က-႟יִ-﻿]/;
 const SWATCH = ['#111111','#c4382c','#1f5fbf','#1d7a46','#e07b00','#7a3fb5','#ffffff'];
@@ -280,7 +401,7 @@ let zoom = 1, pending = null, lastSig = null;
 let undoStack = [], redoStack = [];
 const textCache = {};      // pageId -> items
 const pageEls = {};        // pageId -> {pg, pgi, canvas, ov, rs}
-const props = {color:'#111111', width:2, size:14, font:'Helvetica', bold:false, italic:false, fill:null, opacity:1, hl:'#ffe14d', wo:'#ffffff'};
+const props = {color:'#111111', width:2, size:14, font:'Helvetica', weight:400, bold:false, italic:false, fill:null, opacity:1, hl:'#ffe14d', wo:'#ffffff'};
 const uid = () => Math.random().toString(36).slice(2,10);
 const K = () => zoom * 4/3;  // CSS px per PDF point
 
@@ -301,7 +422,7 @@ function undo(){ if(!undoStack.length) return; commitEdit(); redoStack.push(JSON
 function redo(){ if(!redoStack.length) return; undoStack.push(JSON.stringify(pages)); restore(redoStack.pop()); updUndo(); }
 
 const mctx = document.createElement('canvas').getContext('2d');
-function cssFont(a, px){ return `${a.italic?'italic ':''}${a.bold?'700 ':'400 '}${px}px ${(FONTS[a.font]||FONTS.Helvetica).css}`; }
+function cssFont(a, px){ return `${a.italic?'italic ':''}${wt(a)} ${px}px ${famCss(a.font)}`; }
 function baseOff(a){ // distance from the text box top to the first baseline, in pt
   mctx.font = cssFont(a,100); const m = mctx.measureText('Hg');
   let asc=m.fontBoundingBoxAscent, desc=m.fontBoundingBoxDescent; if(!asc){asc=90.5;desc=21.2;}
@@ -413,7 +534,7 @@ async function loadText(p, pp){
     const st = tc.styles[it.fontName]||{}; let fo=null;
     try{ fo=pp.commonObjs.get(it.fontName); }catch(e){}
     const m = matchFont(fo&&fo.name, {bold:fo&&fo.bold, black:fo&&fo.black, italic:fo&&fo.italic, isMonospace:fo&&fo.isMonospace, isSerifFont:fo&&fo.isSerifFont, fallbackName:(fo&&fo.fallbackName)||st.fontFamily}, it.str);
-    items.push({str:it.str, x:tx[4], base:tx[5], size, w:it.width*vp.scale, font:m.font, bold:m.bold, italic:m.italic, exact:m.exact, src:m.src, done:false});
+    items.push({str:it.str, x:tx[4], base:tx[5], size, w:it.width*vp.scale, font:m.font, weight:m.weight, italic:m.italic, exact:m.exact, src:m.src, word:m.word, done:false});
   }
   textCache[p.id]=items; if(tool==='edittext') renderOverlay(p);
 }
@@ -519,7 +640,7 @@ viewer.addEventListener('pointerdown', e=>{
     e.preventDefault();
     if(a&&a.type==='text'){ select(a.id); startEdit(a.id); return; }
     snapshot();
-    const t={id:uid(), type:'text', text:'', x:pt[0], y:pt[1], size:props.size, font:props.font, bold:props.bold, italic:props.italic, color:props.color};
+    const t={id:uid(), type:'text', text:'', x:pt[0], y:pt[1], size:props.size, font:props.font, weight:props.weight, bold:props.weight>=600, italic:props.italic, color:props.color};
     t.y -= baseOff(t)*0.75; p.annots.push(t); selId=t.id; renderOverlay(p); renderProps(); startEdit(t.id);
     // remove the undo entry if nothing gets typed
     const n=undoStack.length; const chk=()=>{ if(!p.annots.includes(t) && undoStack.length===n) { undoStack.pop(); updUndo(); } };
@@ -607,22 +728,33 @@ function sampleInk(p, t, bg){ // dominant text color inside the item's box
     const hx=v=>v.toString(16).padStart(2,'0'); return '#'+hx(avg(1))+hx(avg(2))+hx(avg(3));
   }catch(e){ return '#111111'; }
 }
-const localFaces = {};
-function registerFace(name, vk){ // load the bundled TTF so screen and exported PDF use the same file
-  const F=FONTS[name]; if(!F||!F.slug) return Promise.resolve();
+const localFaces = {}, cssLinks = {};
+function registerFace(name, vk){ // bundled TTF: screen and exported PDF use the same file
+  const F=FAM[name]; if(!F||!F.slug) return Promise.resolve();
   const k=F.slug+'-'+vk; if(localFaces[k]) return localFaces[k];
   return localFaces[k]=(async()=>{ try{ const bytes=await loadFontBytes(F.slug,vk);
     const ff=new FontFace(name, bytes.slice().buffer, {weight:vk.includes('b')?'700':'400', style:vk.includes('i')?'italic':'normal'});
     await ff.load(); document.fonts.add(ff); }catch(e){} })();
 }
-const fontReady = (a, txt) => { const F=FONTS[a.font];
-  const reg = F&&F.slug ? registerFace(a.font, variantKey(F,a.bold,a.italic)) : Promise.resolve();
-  return Promise.race([reg.then(()=>document.fonts.load(cssFont(a,100), txt||'Hg')).catch(()=>{}), new Promise(r=>setTimeout(r,2500))]); };
+function googleCss(name, w, it){ // Google Fonts stylesheet for one weight/style, added on demand
+  const k=name+'|'+w+'|'+(it?1:0); if(cssLinks[k]) return cssLinks[k];
+  return cssLinks[k]=new Promise(res=>{ const l=document.createElement('link'); l.rel='stylesheet';
+    l.href=`https://fonts.googleapis.com/css2?family=${encodeURIComponent(name).replace(/%20/g,'+')}:ital,wght@${it?1:0},${w}&display=swap`;
+    l.onload=l.onerror=()=>res(); document.head.appendChild(l); setTimeout(res,4000); });
+}
+function ensureFace(a){
+  const F=FAM[a.font]; if(!F||F.std||F.src==='system'||F.src==='upload') return Promise.resolve();
+  const w=nearestW(a.font,wt(a)); const vk=libVariant(F,w,!!a.italic);
+  if(vk) return registerFace(a.font, vk);
+  if(F.g) return googleCss(a.font, w, !!a.italic && F.it);
+  return Promise.resolve();
+}
+const fontReady = (a, txt) => Promise.race([ensureFace(a).then(()=>document.fonts.load(cssFont(a,100), txt||'Hg')).catch(()=>{}), new Promise(r=>setTimeout(r,4000))]);
 async function replaceText(p, i){
   const t=textCache[p.id][i]; if(!t||t.done) return; t.done=true;
   const top=t.base-t.size*0.86, h=t.size*1.12; const bg=sampleBg(p,t.x-1,top+1);
-  const a={id:uid(), type:'text', text:t.str, x:t.x, y:0, size:Math.round(t.size*10)/10, font:t.font, bold:t.bold, italic:t.italic,
-    color:sampleInk(p,t,bg), srcFont:t.src, exact:t.exact};
+  const a={id:uid(), type:'text', text:t.str, x:t.x, y:0, size:Math.round(t.size*10)/10, font:t.font, weight:t.weight, bold:t.weight>=600, italic:t.italic,
+    color:sampleInk(p,t,bg), srcFont:t.src, exact:t.exact, word:t.word};
   await fontReady(a, t.str);
   snapshot();
   p.annots.push({id:uid(), type:'whiteout', x:t.x-1, y:top, w:t.w+2, h, fill:bg});
@@ -732,7 +864,10 @@ function renderProps(){
   if(t==='whiteout'){ const key=a?'fill':'wo'; h+=`<div class="grp"><label class="cap">Fill</label>${['#ffffff','#f4f1e8','#eeeeee','#000000'].map(c=>`<button class="sw${v(key,props.wo)===c?' on':''}" data-set="${key}" data-val="${c}" style="background:${c}" aria-label="Fill ${c}"></button>`).join('')}<input type="color" data-set="${key}" value="${v(key,props.wo)}" aria-label="Custom fill"></div>`; }
   if(['draw','rect','ellipse','line','arrow'].includes(t)) h+=`<div class="grp"><label class="cap" for="pw">Stroke</label><select id="pw" data-set="width">${[0.5,1,2,3,5,8,12].filter(n=>n>0||t==='rect').map(n=>`<option value="${n}"${+v('width')===n?' selected':''}>${n} pt</option>`).join('')}</select></div>`;
   if(t==='rect'||t==='ellipse') h+=`<div class="grp"><label class="cap">Fill</label><button class="sw none${!v('fill')?' on':''}" data-set="fill" data-val="" aria-label="No fill"></button>${['#ffffff','#fde68a','#bfdbfe','#fecaca','#111111'].map(c=>`<button class="sw${v('fill')===c?' on':''}" data-set="fill" data-val="${c}" style="background:${c}" aria-label="Fill ${c}"></button>`).join('')}</div>`;
-  if(t==='text'||t==='edittext') h+=`<div class="grp"><select id="pf" data-set="font" aria-label="Font" style="max-width:190px;font-family:${esc((FONTS[v('font')]||FONTS.Helvetica).css)}">${FONT_LIB.map(([g,list])=>`<optgroup label="${g}">${list.map(([f,,,,note])=>`<option value="${f}" style="font-family:${esc(FONTS[f].css)}"${v('font')===f?' selected':''}>${f}${note&&note!=='built in'?' · '+note:''}</option>`).join('')}</optgroup>`).join('')}</select><input type="number" id="ps" data-set="size" min="4" max="200" step="0.5" value="${v('size')}" aria-label="Font size"><button class="tog${v('bold')?' on':''}" data-tog="bold" aria-label="Bold">B</button><button class="tog${v('italic')?' on':''}" data-tog="italic" aria-label="Italic" style="font-style:italic;font-family:serif">I</button></div>`;
+  if(t==='text'||t==='edittext'){ const fn=v('font'), F=FAM[fn]||{w:[400,700]}, cw=nearestW(fn, a?wt(a):props.weight);
+    h+=`<div class="grp"><button class="fpbtn" id="fpOpen" aria-haspopup="dialog" style="font-family:${esc(famCss(fn))}"><span>${esc(fn)}</span>${ic('M7 10l5 5 5-5')}</button>`
+      + `<select id="pwt" data-set="weight" aria-label="Font weight">${F.w.map(w=>`<option value="${w}"${w===cw?' selected':''}>${WEIGHT_NAMES[w]||w}</option>`).join('')}</select>`
+      + `<input type="number" id="ps" data-set="size" min="4" max="300" step="0.5" value="${v('size')}" aria-label="Font size"><button class="tog${cw>=600?' on':''}" data-tog="bold" aria-label="Bold">B</button><button class="tog${v('italic')?' on':''}" data-tog="italic" aria-label="Italic" style="font-style:italic;font-family:serif"${F.it===false?' disabled':''}>I</button></div>`; }
   if(t==='edittext') h+=colorGrp('color',SWATCH,'Color');
   if(['draw','rect','ellipse','line','arrow','image'].includes(t)) h+=`<div class="grp"><label class="cap" for="po">Opacity</label><input type="range" id="po" data-set="opacity" min="0.1" max="1" step="0.05" value="${v('opacity',1)}"></div>`;
   if(a) h+=`<div class="grp"><button class="ibtn" id="pDup" aria-label="Duplicate" title="Duplicate">${ic(I.dup)}</button><button class="ibtn" id="pDel" aria-label="Delete" title="Delete (Del)">${ic(I.trash)}</button></div>`;
@@ -743,30 +878,126 @@ function renderProps(){
   let hint = a? (a.type==='text'?'Double-click to edit text · corner handle scales it':'Drag to move · Del removes it') : (hints[t]||'');
   if(a&&a.type==='text'&&a.srcFont){
     const same = a.exact && (a.font===a.detFont || !a.detFont);
-    hint = `<span class="det"><b>Original font:</b> ${esc(a.srcFont)}</span> ` + (a.font===(a.detFont||a.font) ? (a.exact ? '<span class="tag ok">Exact match</span>' : `<span class="tag">Closest match: ${esc(a.font)}${FONTS[a.font]?.note&&FONTS[a.font].note!=='built in'?' ('+FONTS[a.font].note+')':''}</span>`) : `<span class="tag">Changed to ${esc(a.font)}</span>`);
+    hint = `<span class="det"><b>Original font:</b> ${esc(a.srcFont)}</span> ` + (a.font===(a.detFont||a.font) ? (a.exact ? `<span class="tag ok">Exact match${FAM[a.font]?.src==='system'?' · from this computer':''}</span>` : `<span class="tag">Closest match: ${esc(a.font)}${alikeNote(a.font)?' ('+esc(alikeNote(a.font))+')':''}</span>`) : `<span class="tag">Changed to ${esc(a.font)}</span>`);
   }
+  if(a&&a.type==='text'&&a.word&&!a.exact&&'queryLocalFonts' in window&&!sysFonts) hint+=` <button class="linkbtn" id="useSys">Use the real ${esc(a.word)} from this computer</button>`;
   h+=`<span class="hint">${hint}</span>`;
   $('#props').innerHTML=h;
 }
 function applyProp(key,val){
-  if(['size','width','opacity'].includes(key)) val=+val; if(key==='fill'&&val==='') val=null;
+  if(['size','width','opacity','weight'].includes(key)) val=+val; if(key==='fill'&&val==='') val=null;
   if(key==='hl'||key==='wo'){ props[key]=val; renderProps(); return; }
-  if(['font','bold','italic'].includes(key)) fontReady({...props,[key]:val});
+  const fontKey=['font','weight','italic'].includes(key);
   props[key]=val;
-  if(selId && ['font','bold','italic'].includes(key)){ const [p,a]=findAnnot(selId); if(a&&a.type==='text'){
-    snapshot(); if(!a.detFont) a.detFont=a.font; const base=a.y+baseOff(a); a[key]=val;
+  if(key==='font') props.weight=nearestW(val, props.weight);
+  if(key==='weight') props.bold=val>=600;
+  if(fontKey) fontReady({...props});
+  if(selId && fontKey){ const [p,a]=findAnnot(selId); if(a&&a.type==='text'){
+    snapshot(); if(!a.detFont) a.detFont=a.font; const base=a.y+baseOff(a);
+    a[key]=val; if(key==='font') a.weight=nearestW(val, wt(a)); a.bold=wt(a)>=600; if(key==='font'&&FAM[val]&&!FAM[val].it) a.italic=false;
     fontReady(a,a.text).then(()=>{ a.y=base-baseOff(a); renderOverlay(p); }); renderOverlay(p); renderProps(); return; } }
-  if(selId){ const [p,a]=findAnnot(selId); if(a && (key in a || ['fill','opacity','bold','italic'].includes(key))){ snapshot(); a[key]=val; renderOverlay(p); } }
+  if(selId){ const [p,a]=findAnnot(selId); if(a && (key in a || ['fill','opacity'].includes(key))){ snapshot(); a[key]=val; renderOverlay(p); } }
   renderProps();
 }
 $('#props').addEventListener('click', e=>{
   const b=e.target.closest('button'); if(!b) return;
   if(b.dataset.set&&b.dataset.val!==undefined) applyProp(b.dataset.set,b.dataset.val);
-  if(b.dataset.tog){ const [,a]=selId?findAnnot(selId):[null,null]; applyProp(b.dataset.tog, !(a?a[b.dataset.tog]:props[b.dataset.tog])); }
+  if(b.dataset.tog==='bold'){ const [,a]=selId?findAnnot(selId):[null,null]; const o=a&&a.type==='text'?a:props; applyProp('weight', nearestW(o.font, wt(o)>=600?400:700)); }
+  else if(b.dataset.tog){ const [,a]=selId?findAnnot(selId):[null,null]; applyProp(b.dataset.tog, !(a?a[b.dataset.tog]:props[b.dataset.tog])); }
+  if(b.id==='fpOpen') openFontPicker(b);
+  if(b.id==='useSys'){ const [,a]=findAnnot(selId); loadSystemFonts().then(map=>{ const fam=[...map.keys()].find(f=>fkey(f)===fkey(a.word));
+      if(fam){ a.exact=true; applyProp('font', fam); a.detFont=fam; renderProps(); toast(`Using ${fam} from this computer`); } else toast(`${a.word} is not installed on this computer.`); })
+    .catch(()=>toast('Font access was blocked. Allow "Fonts" for this site in your browser settings.',4500)); }
   if(b.id==='pDel') deleteSel(); if(b.id==='pDup') dupSel();
 });
 $('#props').addEventListener('change', e=>{ const el=e.target; if(el.dataset.set) applyProp(el.dataset.set, el.value); });
 $('#props').addEventListener('pointerdown', e=>{ if(editingId && e.target.closest('button,select,input')) { /* keep editing target */ const id=editingId; commitEdit(); selId=id; } });
+
+
+// ---------- font picker ----------
+const CHIPS=[['popular','Popular'],['all','All'],['word','Word fonts'],['sans-serif','Sans'],['serif','Serif'],['display','Display'],['handwriting','Handwriting'],['monospace','Mono'],['arabic','Urdu & Arabic'],['mine','My fonts']];
+let fpChip='popular', fpLimit=150, fpAnchor=null, previewIO=null; const previewed=new Set(); let previewQueue=[], previewTimer=null;
+function fpList(){
+  const q=fkey($('#fpQ').value); let names;
+  if(fpChip==='word' && !q){ names=[...new Set(WORD_ALIKES.map(x=>x[1]))].filter(n=>FAM[n]); }
+  else {
+    names=Object.keys(FAM);
+    const chip = q && fpChip==='popular' ? 'all' : fpChip;
+    if(chip==='popular') names=['Helvetica','Times','Courier',...POPULAR.filter(n=>FAM[n])];
+    else if(chip==='word') names=names.filter(n=>ALIKE[n] || (FAM[n].src==='system'&&WORD_ALIKES.some(x=>x[0]===n)));
+    else if(chip==='arabic') names=names.filter(n=>FAM[n].sub?.includes('arabic'));
+    else if(chip==='mine') names=names.filter(n=>FAM[n].src==='upload'||FAM[n].src==='system');
+    else if(chip!=='all') names=names.filter(n=>FAM[n].cat===chip);
+    if(chip!=='popular') names.sort((a,b)=>a.localeCompare(b));
+    if(q){ const qs=names.filter(n=>fkey(n).startsWith(q)), qc=names.filter(n=>!fkey(n).startsWith(q)&&(fkey(n).includes(q)||(ALIKE[n]||[]).some(x=>fkey(x[0]).includes(q)))); names=[...qs,...qc]; }
+  }
+  return names;
+}
+function fpMeta(n){ const F=FAM[n]; const parts=[];
+  if(ALIKE[n]) parts.push(alikeNote(n));
+  if(F.src==='system') parts.push('On this computer'); else if(F.src==='upload') parts.push('Uploaded'); else if(F.std) parts.push('Built into PDF');
+  else parts.push(CAT_NAME[F.cat]||F.cat);
+  const st=F.w.length*(F.it?2:1); if(!F.std) parts.push(`${st} style${st===1?'':'s'}`);
+  if(F.slug) parts.push('works offline');
+  return parts.join(' · '); }
+function renderFp(){
+  const names=fpList(); const cur=($('#fpOpen')?.textContent||'').trim(); const list=$('#fpList');
+  list.innerHTML = names.length ? names.slice(0,fpLimit).map(n=>`<button class="fp-row${n===cur?' on':''}" data-font="${esc(n)}" role="option" aria-selected="${n===cur}"><span class="fp-name" data-pv="${esc(n)}" style="font-family:${esc(famCss(n))}">${esc(n)}</span><span class="fp-meta">${esc(fpMeta(n))}</span></button>`).join('')
+    + (names.length>fpLimit?`<button class="fp-more" id="fpMore">Show ${Math.min(150,names.length-fpLimit)} more of ${names.length-fpLimit}</button>`:'')
+    : `<div class="fp-empty">${fpChip==='mine'?'No fonts added yet. Use the buttons below to add fonts from this computer or a font file.':'No fonts match that search.'}</div>`;
+  $('#fpCount').textContent = `${names.length.toLocaleString()} font${names.length===1?'':'s'}`;
+  const eff = $('#fpQ').value.trim() && fpChip==='popular' ? 'all' : fpChip;
+  document.querySelectorAll('.fp-chip').forEach(c=>c.classList.toggle('on',c.dataset.chip===eff));
+  if(previewIO) previewIO.disconnect();
+  previewIO=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ queuePreview(e.target.dataset.pv); previewIO.unobserve(e.target); } }),{root:list,rootMargin:'200px'});
+  list.querySelectorAll('[data-pv]').forEach(el=>previewIO.observe(el));
+}
+function queuePreview(n){ const F=FAM[n]; if(!F||previewed.has(n)) return; previewed.add(n);
+  if(F.slug){ registerFace(n, F.v.includes('r')?'r':'b'); return; }
+  if(!F.g) return; previewQueue.push(n); clearTimeout(previewTimer); previewTimer=setTimeout(flushPreview,60); }
+function flushPreview(){ // one small stylesheet per batch, containing only the letters of each font's name
+  while(previewQueue.length){ const batch=previewQueue.splice(0,15);
+    const fams=batch.map(n=>`family=${encodeURIComponent(n).replace(/%20/g,'+')}:wght@${nearestW(n,400)}`).join('&');
+    const text=encodeURIComponent([...new Set(batch.join(''))].join(''));
+    const l=document.createElement('link'); l.rel='stylesheet'; l.href=`https://fonts.googleapis.com/css2?${fams}&text=${text}&display=swap`; document.head.appendChild(l); } }
+function openFontPicker(btn){
+  fpAnchor=btn; const fp=$('#fp'); fp.hidden=false; fpLimit=150; $('#fpQ').value='';
+  $('#fpSys').hidden = !('queryLocalFonts' in window);
+  $('#fpQ').placeholder=`Search ${Object.keys(FAM).length.toLocaleString()} fonts`;
+  placeFp(); renderFp(); if(innerWidth>760) $('#fpQ').focus();
+}
+function placeFp(){ const fp=$('#fp'); if(innerWidth<=760){ fp.style.left=''; fp.style.top=''; return; }
+  const r=fpAnchor.getBoundingClientRect(); fp.style.left=Math.max(8,Math.min(r.left, innerWidth-fp.offsetWidth-8))+'px'; fp.style.top=(r.bottom+6)+'px'; }
+function closeFp(){ $('#fp').hidden=true; }
+function buildFp(){
+  const fp=document.createElement('div'); fp.className='fp'; fp.id='fp'; fp.hidden=true; fp.setAttribute('role','dialog'); fp.setAttribute('aria-label','Choose a font');
+  fp.innerHTML=`<div class="fp-head"><input id="fpQ" type="search" autocomplete="off" spellcheck="false" aria-label="Search fonts"><button class="ibtn" id="fpX" aria-label="Close">${ic('M6 6l12 12M18 6L6 18')}</button></div>
+    <div class="fp-chips">${CHIPS.map(([k,l])=>`<button class="fp-chip" data-chip="${k}">${l}</button>`).join('')}</div>
+    <div class="fp-sub"><span id="fpCount"></span></div>
+    <div class="fp-list" id="fpList" role="listbox"></div>
+    <div class="fp-foot"><button class="btn" id="fpSys">${ic('M4 5h16v11H4zM9 20h6M12 16v4')}<span>Fonts on this computer</span></button><button class="btn" id="fpUp">${ic('M12 16V4M7 9l5-5 5 5M4 20h16')}<span>Upload font file</span></button></div>`;
+  document.body.appendChild(fp);
+  $('#fpQ').addEventListener('input',()=>{ fpLimit=150; renderFp(); $('#fpList').scrollTop=0; });
+  $('#fpQ').addEventListener('keydown',e=>{ if(e.key==='Escape') closeFp(); if(e.key==='Enter'){ const r=$('#fpList .fp-row'); if(r) r.click(); } e.stopPropagation(); });
+  fp.addEventListener('click', async e=>{
+    const chip=e.target.closest('.fp-chip'); if(chip){ fpChip=chip.dataset.chip; fpLimit=150; renderFp(); $('#fpList').scrollTop=0; return; }
+    const row=e.target.closest('.fp-row'); if(row){ const n=row.dataset.font; closeFp(); applyProp('font', n); return; }
+    if(e.target.closest('#fpMore')){ fpLimit+=150; renderFp(); return; }
+    if(e.target.closest('#fpX')) { closeFp(); return; }
+    if(e.target.closest('#fpUp')) { $('#fFont').click(); return; }
+    if(e.target.closest('#fpSys')){
+      try{ const before=Object.keys(FAM).length; await loadSystemFonts(); fpChip='mine'; renderFp();
+        toast(`Added ${(sysFonts?.size||0).toLocaleString()} fonts from this computer`); }
+      catch(err){ toast(err?.name==='NotAllowedError'||err?.name==='SecurityError' ? 'Font access was blocked. Allow "Fonts" for this site in your browser settings.' : 'This browser cannot list installed fonts. Use Chrome or Edge on a computer, or upload a font file.', 4500); }
+    }
+  });
+  document.addEventListener('pointerdown', e=>{ if(!fp.hidden && !fp.contains(e.target) && !e.target.closest('#fpOpen')) closeFp(); });
+  addEventListener('resize', ()=>{ if(!fp.hidden&&fpAnchor) placeFp(); });
+  const fi=document.createElement('input'); fi.type='file'; fi.id='fFont'; fi.accept='.ttf,.otf,.woff,font/ttf,font/otf,font/woff'; fi.multiple=true; fi.hidden=true; document.body.appendChild(fi);
+  fi.addEventListener('change', async e=>{ const files=[...e.target.files]; e.target.value=''; let last=null, n=0;
+    for(const f of files){ try{ last=await addUploadedFont(f); n++; }catch(err){ toast(`${f.name}: ${err.message||'not a usable font file'}`, 4500); } }
+    if(last){ toast(`Added ${n} font file${n===1?'':'s'}`); if(files.length===1){ closeFp(); applyProp('font', last); } else { fpChip='mine'; renderFp(); } } });
+}
 
 // ---------- thumbnails & page ops ----------
 let thumbIO;
@@ -834,12 +1065,30 @@ async function buildPdf(){
   const col=h=>rgb(...hexRgb(h));
   for(const p of pages) if(p.src && !loaded[p.src]) loaded[p.src]=await PDFDocument.load(sources[p.src].bytes,{ignoreEncryption:true});
   if(window.fontkit) out.registerFontkit(window.fontkit);
-  const getFont=async a=>{ const F=FONTS[a.font]||FONTS.Helvetica;
-    if(F.std){ const n=F.std[(a.bold?1:0)+(a.italic?2:0)]; return fonts[n]||(fonts[n]={pdf:await out.embedFont(StandardFonts[n]), std:true}); }
-    const k=F.slug+'-'+variantKey(F,a.bold,a.italic); if(fonts[k]) return fonts[k];
-    try{ const bytes=await loadFontBytes(F.slug, variantKey(F,a.bold,a.italic));
-      return fonts[k]={pdf:await out.embedFont(bytes,{subset:true}), fk:window.fontkit.create(bytes)}; }
-    catch(e){ console.warn(e); return fonts[k]={failed:true}; } };
+  // Returns {std, pdf} for built-in fonts, or {faces:[{pdf, fk}]} (one per file; Google fonts come split by character set).
+  const embed=async (k, bytes)=>{ if(fonts[k]) return fonts[k]; return fonts[k]={pdf:await out.embedFont(bytes,{subset:true}), fk:window.fontkit.create(bytes)}; };
+  const getFont=async a=>{ const F=FAM[a.font]||FAM.Helvetica; const w=nearestW(a.font,wt(a)), it=!!a.italic;
+    try{
+      if(F.std){ const n=F.std[(w>=600?1:0)+(it?2:0)]; return fonts[n]||(fonts[n]={pdf:await out.embedFont(StandardFonts[n]), std:true}); }
+      if(F.faces){ const keys=Object.keys(F.faces); const best=keys.map(k=>[Math.abs(parseInt(k)-w)+(k.endsWith('i')!==it?1000:0),k]).sort((x,y)=>x[0]-y[0])[0]?.[1];
+        if(best) return {faces:[await embed('up:'+a.font+best, F.faces[best])]}; }
+      if(F.src==='system'){ const bytes=await systemBytes(a.font,w,it); return {faces:[await embed('sys:'+a.font+w+it, bytes)]}; }
+      const vk=libVariant(F,w,it);
+      if(vk) return {faces:[await embed(F.slug+'-'+vk, await loadFontBytes(F.slug,vk))]};
+      if(F.g){ const style=it&&F.it?'italic':'normal'; const faces=[];
+        for(const sub of subsetsFor(F, a.text)){ let bytes;
+          try{ bytes=await googleFile(a.font, sub, w, style); }catch(e){ if(style==='italic') bytes=await googleFile(a.font, sub, w, 'normal'); else throw e; }
+          faces.push(await embed(`g:${a.font}:${sub}:${w}:${style}`, bytes)); }
+        return {faces}; }
+      if(F.slug){ const v2=F.v.includes('b')&&w>=600?'b':'r'; return {faces:[await embed(F.slug+'-'+v2, await loadFontBytes(F.slug,v2))]}; }
+    }catch(e){ console.warn('Font not embeddable, using an image of the text instead:', a.font, e); }
+    return {failed:true}; };
+  const runsOf=(line, faces)=>{ const out=[];
+    for(const ch of line){ const cp=ch.codePointAt(0); const prev=out.length?out[out.length-1][1]:null;
+      const f = prev&&prev.fk.hasGlyphForCodePoint(cp) ? prev : faces.find(f=>f.fk.hasGlyphForCodePoint(cp));
+      if(!f){ if(cp<=32&&faces.length){ if(prev) out[out.length-1][0]+=ch; else out.push([ch,faces[0]]); continue; } return null; }
+      if(prev===f) out[out.length-1][0]+=ch; else out.push([ch,f]); }
+    return out; };
   const getImg=async id=>{ if(imgs[id]) return imgs[id]; const im=images[id]; return imgs[id]=(im.kind==='jpg'?await out.embedJpg(im.url):await out.embedPng(im.url)); };
   for(const p of pages){
     let page;
@@ -859,10 +1108,11 @@ async function buildPdf(){
       else if(a.type==='image') page.drawImage(await getImg(a.img),{x:X(a.x),y:Y(a.y+a.h),width:a.w,height:a.h,opacity:op});
       else if(a.type==='text'){
         const lines=a.text.split('\n'), lh=a.size*1.2, b0=a.y+baseOff(a);
-        const f=await getFont(a); let ok=!f.failed && !COMPLEX.test(a.text);
+        const f=await getFont(a); let ok=!f.failed && !COMPLEX.test(a.text); let lineRuns=null;
         if(ok&&f.std){ try{ lines.forEach(l=>f.pdf.encodeText(l)); }catch(e){ ok=false; } }
-        if(ok&&f.fk){ for(const ch of a.text){ const cp=ch.codePointAt(0); if(cp>32 && !f.fk.hasGlyphForCodePoint(cp)){ ok=false; break; } } }
-        if(ok) lines.forEach((l,i)=>{ if(l) page.drawText(l,{x:X(a.x),y:Y(b0+i*lh),size:a.size,font:f.pdf,color:col(a.color)}); });
+        if(ok&&f.faces){ lineRuns=lines.map(l=>runsOf(l,f.faces)); if(lineRuns.some(r=>r===null)) ok=false; }
+        if(ok&&f.std) lines.forEach((l,i)=>{ if(l) page.drawText(l,{x:X(a.x),y:Y(b0+i*lh),size:a.size,font:f.pdf,color:col(a.color)}); });
+        else if(ok) lineRuns.forEach((runs,i)=>{ let x=X(a.x); for(const [txt,fc] of runs){ page.drawText(txt,{x,y:Y(b0+i*lh),size:a.size,font:fc.pdf,color:col(a.color)}); x+=fc.pdf.widthOfTextAtSize(txt,a.size); } });
         else { // right-to-left scripts or glyphs the font lacks: embed the text as a crisp image
           await fontReady(a, a.text);
           const S=4; mctx.font=cssFont(a,a.size*S); const w=Math.max(...lines.map(l=>mctx.measureText(l).width))/S+2, h=lines.length*lh;
@@ -878,7 +1128,9 @@ async function buildPdf(){
 }
 let saving=false;
 async function download(){
-  if(saving) return; commitEdit(); saving=true; const b=$('#bSave'); const lbl=b.querySelector('.lbl'); const old=lbl.textContent; lbl.textContent='Preparing…';
+  if(saving) return; commitEdit();
+  if(pages.some(p=>p.annots.some(a=>a.type==='text'&&FAM[a.font]?.src==='system'))) loadSystemFonts().catch(()=>{});
+  saving=true; const b=$('#bSave'); const lbl=b.querySelector('.lbl'); const old=lbl.textContent; lbl.textContent='Preparing…';
   try{
     const bytes=await buildPdf(); const name=docName.replace(/\.pdf$/i,'')+'-edited.pdf';
     const dl = window.claude?.use ? await window.claude.use('downloads') : null;
@@ -972,7 +1224,9 @@ function boot(){
   renderRail(); renderProps(); updUndo();
   if(!window.pdfjsLib||!window.PDFLib){ $('#loading').textContent='The PDF engine could not load. Check your connection and reload.'; return; }
   pdfjsLib.GlobalWorkerOptions.workerSrc='lib/pdf.worker.min.js';
-  loadSample();
+  buildFp();
+  try{ navigator.permissions?.query({name:'local-fonts'}).then(st=>{ if(st.state==='granted') loadSystemFonts().catch(()=>{}); }).catch(()=>{}); }catch(e){}
+  loadCatalog().finally(loadSample);
   let rt; addEventListener('resize',()=>{ clearTimeout(rt); rt=setTimeout(()=>{ $('#thumbs').hidden = innerWidth<=760; },150); });
 }
 boot();
