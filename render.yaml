@@ -1,0 +1,21 @@
+# Render Blueprint: deploys this folder as a free static site.
+services:
+  - type: web
+    name: redline-pdf-editor
+    runtime: static
+    buildCommand: echo "No build step needed"
+    staticPublishPath: .
+    pullRequestPreviewsEnabled: false
+    headers:
+      - path: /fonts/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /lib/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
